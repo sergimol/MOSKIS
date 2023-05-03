@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class CSVSerializer : ISerializer
 {
+    private void Start()
+    {
+        
+    }
     public override string Serialize(TrackerEvent e)
     {
         string cadena = e.toCSV();

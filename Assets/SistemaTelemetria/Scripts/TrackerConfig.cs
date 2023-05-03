@@ -26,4 +26,11 @@ public class TrackerConfig : MonoBehaviour
             eventsTracked.Add(config.eventName, config.isTracked);
         }
     }
+
+    private void Start()
+    {
+        
+    }
+
+    public Dictionary<string, bool> getEvents() { return eventsTracked; }
 }
