@@ -7,11 +7,13 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
-public class TrackerEvent
+public class TrackerEvent : MonoBehaviour
 {
     //Variables comunes
     protected string type; 
     protected long timeStamp;
+
+    public string choice;
 
     public TrackerEvent(string t)
     {

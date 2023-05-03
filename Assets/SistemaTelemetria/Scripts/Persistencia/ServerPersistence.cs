@@ -44,6 +44,10 @@ public class ServerPersistence : IPersistence
         serializerJSON = GetComponent<JSONSerializer>();
     }
 
+    private void Start()
+    {
+        
+    }
     public override void Send(TrackerEvent e) {
         eventsBuff.Add(e);
     }
