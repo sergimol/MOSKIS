@@ -12,9 +12,19 @@ public class Window_Graph : MonoBehaviour
 
     [SerializeField]
     RectTransform graph_container;
+    [SerializeField]
+    RectTransform label_template_X;
+    [SerializeField]
+    RectTransform label_template_Y;
+    [SerializeField]
+    RectTransform dash_template_X;
+    [SerializeField]
+    RectTransform dash_template_Y;
 
     [SerializeField]
     List<float> points;
+
+    int y_separator = 10;
 
     private void Awake()
     {
@@ -67,6 +77,32 @@ public class Window_Graph : MonoBehaviour
                                        point_object.GetComponent<RectTransform>().anchoredPosition);
             }
             last_point_object = point_object;
+
+            // Añadimos el marcador X
+            RectTransform labelX = Instantiate(label_template_X);
+            labelX.SetParent(graph_container, false);
+            labelX.anchoredPosition = new Vector2(x_pos, -7f); // le casca un 7 el men, luego lo cambio
+            labelX.GetComponent<Text>().text = i.ToString();
+
+            // Añadimos el separador X
+            RectTransform dashX = Instantiate(dash_template_X);
+            dashX.SetParent(graph_container, false);
+            dashX.anchoredPosition = new Vector2(x_pos, -7f); // le casca un 7 el men, luego lo cambio
+        }
+
+        // Añadir el marcador de la Y
+        for(int i = 0; i <= y_separator; i++)
+        {
+            RectTransform labelX = Instantiate(label_template_Y);
+            labelX.SetParent(graph_container, false);
+            float n = i * (1f / y_separator);
+            labelX.anchoredPosition = new Vector2(-7f, n * graph_Height); // le casca un 7 el men, luego lo cambio
+            labelX.GetComponent<Text>().text = (n * y_max).ToString();
+
+            // Añadimos el separador Y
+            RectTransform dashX = Instantiate(dash_template_Y);
+            dashX.SetParent(graph_container, false);
+            dashX.anchoredPosition = new Vector2(-7f, n * graph_Height); // le casca un 7 el men, luego lo cambio
         }
     }
 
