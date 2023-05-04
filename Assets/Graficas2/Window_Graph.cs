@@ -22,12 +22,16 @@ public class Window_Graph : MonoBehaviour
     RectTransform dash_template_Y;
 
     [SerializeField]
+    LineRenderer line_renderer;
+
+    [SerializeField]
     List<float> points;
 
     int y_separator = 10;
 
     private void Awake()
     {
+        line_renderer.positionCount = points.Count;
         ShowGraph();
     }
 
@@ -73,8 +77,9 @@ public class Window_Graph : MonoBehaviour
             GameObject point_object = CreateCircle(new Vector2(x_pos, y_pos));
             if(last_point_object != null)
             {
-                CreatePointConnection(last_point_object.GetComponent<RectTransform>().anchoredPosition,
-                                       point_object.GetComponent<RectTransform>().anchoredPosition);
+                CreatePointConnection(i, 
+                                      last_point_object.transform.position,
+                                      point_object.transform.position);
             }
             last_point_object = point_object;
 
@@ -106,30 +111,11 @@ public class Window_Graph : MonoBehaviour
         }
     }
 
-    void CreatePointConnection(Vector2 posA, Vector2 posB)
+    void CreatePointConnection(int i, Vector2 posA, Vector2 posB)
     {
-        // Creamos una Imagen
-        GameObject game_Object = new GameObject();
-        game_Object.AddComponent<Image>();
-        game_Object.transform.SetParent(graph_container.transform, false);
-
-        // Seteamos su posicion
-        RectTransform rect = game_Object.GetComponent<RectTransform>();
-
-        // Direccion de la linea
-        Vector2 dir = (posB - posA).normalized;
-        float distance = Vector2.Distance(posA, posB);
-        rect.localEulerAngles = new Vector3(0, 0, GetAngle(posB, posA));
-
-        // Tamaño de la linea
-        rect.sizeDelta = new Vector2(distance, 3);
-        rect.anchorMin = new Vector2(0, 0);
-        rect.anchorMax = new Vector2(0, 0);
-
-        // Posicion, entre ambos puntos
-        rect.anchoredPosition = posA + (dir * distance)/2; 
-
-
+        //////
+        line_renderer.SetPosition(i-1, posA);
+        line_renderer.SetPosition(i, posB);
     }
 
     private float GetAngle(Vector2 point1, Vector2 point2)
