@@ -10,20 +10,21 @@ public class Window_Graph : MonoBehaviour
 {
     [SerializeField]
     Sprite circle_sprite;
-    [SerializeField]
-    float circle_scale;
+    float circle_scale = 5;
 
+    // Puntos de la telemetria
+    List<float> points;
+    [SerializeField]
+    LineRenderer line_renderer;
+
+    // Puntos del diseñador
+    List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
+    [SerializeField]
+    LineRenderer objetive_line_renderer;
+
+    // Containers para los objetos
     [SerializeField]
     RectTransform graph_container;
-    [SerializeField]
-    RectTransform label_template_X;
-    [SerializeField]
-    RectTransform label_template_Y;
-    [SerializeField]
-    RectTransform dash_template_X;
-    [SerializeField]
-    RectTransform dash_template_Y;
-
     [SerializeField]
     GameObject points_container;
     [SerializeField]
@@ -35,29 +36,25 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform left_container;
 
-
-    // Puntos de la telemetria
-    List<float> points;
+    // Objetos que generamos
     [SerializeField]
-    LineRenderer line_renderer;
-
-    // Puntos del diseñador
-    List<float> objetive_points = new List<float>{10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
+    RectTransform label_template_X;
     [SerializeField]
-    LineRenderer objetive_line_renderer;
+    RectTransform label_template_Y;
+    [SerializeField]
+    RectTransform dash_template_X;
+    [SerializeField]
+    RectTransform dash_template_Y;
 
-    int y_separator = 10;
-
-    //GameObject[] circles;
-    List<GameObject> circles;
-
+    // Dimensiones del Grafico
     float graph_Height;
     float graph_Width;
-    float x_size; // distancia entre puntos de X
-    float x_pos = 0;
-    float y_size;
 
-    int visualize_points = 10; // numero de puntos que se van a representar como maximo a la vez en la grafica
+    float x_size; // distancia entre puntos de X
+    float y_size; // distancia entre puntos de Y
+    float x_pos = 0;
+
+    int x_segments = 10; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
     int y_segments = 8; // numero de separaciones que tiene el Eje Y
     // |-------------*-
     // |-------*------- 
@@ -66,29 +63,28 @@ public class Window_Graph : MonoBehaviour
     // +---------------
     // Los puntos se van ocultando por la izquierda <- <- <-
 
-    [SerializeField]
-    GameObject separator_line_renderer;
 
-
-    // 
-    float actual_y_max;
-    float actual_y_min;
-    float actual_x_max;
-    //
-    float last_x;
-    float last_y;
-
-    float y_max = 100f; // Valor maximo que puede alcanzar el Eje Y 
-                        // Inicialmente lo determina el mayor valor de la grafica del diseñador
-                        // Posteriormente se actualiza si aparecen valores mayores
+    float x_max; // Valor maximo que tiene el Eje X en cada momento
+                 // Cada vez que se añade un punto se suma
+    float y_max; // Valor maximo que puede alcanzar el Eje Y 
+                 // Inicialmente lo determina el mayor valor de la grafica del diseñador
+                 // Posteriormente se actualiza si aparecen valores mayores
 
     int acostada = 1;
 
+    // Listas de objetos generados
     TextMeshProUGUI[] label_Y_List;
     List<TextMeshProUGUI> label_X_List;
+    List<GameObject> circles;
+    List<GameObject> objetive_circles;
+    int objective_index = 0;
 
 
-    private void Awake()
+    // Renderizado dentro del Viewport
+    
+
+
+    private void Start()
     {
         label_Y_List = new TextMeshProUGUI[y_segments + 1];
 
@@ -97,15 +93,14 @@ public class Window_Graph : MonoBehaviour
         // Ancho del grid
         graph_Width = graph_container.sizeDelta.x;
 
-        visualize_points--;
+        x_segments--;
 
         circles = new List<GameObject>();
+        objetive_circles = new List<GameObject>();
         points = new List<float>();
         label_X_List = new List<TextMeshProUGUI>();
 
-        actual_x_max = visualize_points;
-        actual_y_max = y_max;
-        actual_y_min = 0;
+        x_max = x_segments;
 
         y_max = getMaxFromList();
 
@@ -124,51 +119,18 @@ public class Window_Graph : MonoBehaviour
             AddPoint(acostada);
             acostada *= 2;
         }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            MoveLeft();
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            //MoveDown();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-           // MoveUp();
-        }
-    }
-
-    // Crea un circulo, pàra representar graficamente un punto
-    GameObject CreateCircle(Vector2 pos)
-    {
-        // Creamos una Imagen
-        GameObject game_Object = new GameObject("Point");
-        game_Object.AddComponent<Image>();
-        game_Object.transform.SetParent(points_container.transform, false);
-
-        // Seteamos la imagen 
-        game_Object.GetComponent<Image>().sprite = circle_sprite;
-
-        // Seteamos su posicion
-        RectTransform rect = game_Object.GetComponent<RectTransform>();
-        rect.anchoredPosition = pos;
-        rect.sizeDelta = new Vector2(circle_scale, circle_scale); 
-        rect.anchorMin = new Vector2(0, 0);
-        rect.anchorMax = new Vector2(0, 0);
-
-        return game_Object;
     }
 
     void ShowGraph()
     {
-        x_size = graph_Width / visualize_points;
+        x_size = graph_Width / x_segments;
         y_size = graph_Height / y_segments;
 
         float x = 0;
         float y = x;
 
         // MARCADORES EJE X
-        for (int i = 0; i < visualize_points + 1; i++)
+        for (int i = 0; i < x_segments + 1; i++)
         {
             RectTransform dashX = Instantiate(dash_template_X, lines_container.transform);
             dashX.anchoredPosition = new Vector2(x, 0);
@@ -201,15 +163,52 @@ public class Window_Graph : MonoBehaviour
 
     }
 
+    // Añade un nuevo punto a la grafica
+    public void AddPoint(float new_y)
+    {
+        /// PUNTO TELEMETRIA
+        // Añadimos el nuevo punto
+        points.Add(new_y);
+        CheckMove(new Vector2(points.Count - 1, new_y));
+        Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
+
+        // Lo creamos
+        float y_pos = (points[points.Count-1] / y_max) * graph_Height;
+        GameObject point_object = CreateCircle(new Vector2(x_pos, y_pos));
+        circles.Add(point_object);
+
+
+        /// PUNTO OBJETIVO
+        // Añadimos el nuevo punto
+        if(objetive_points.Count > points.Count)
+        {
+            CheckMove(new Vector2(objective_index, new_y));
+            Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
+            Debug.Log("P: " + points.Count   + "  O:" + objetive_points.Count);
+
+            // Lo creamos
+            float o_y_pos = (objetive_points[objective_index] / y_max) * graph_Height;
+            GameObject o_point_object = CreateCircle(new Vector2(x_pos, o_y_pos));
+            objetive_circles.Add(o_point_object);
+            objective_index++;
+        }
+
+        x_pos += x_size;
+        
+        
+        // Lo unimos a la grafica
+        CreateLine();
+    }
 
     // Crea la linea que une todos los puntos
     // Solo dibuja la linea entre los puntos que se renderizan dentro del viewport
     // Ahora como esta hay que cambiarlo
     private void CreateLine()
     {
+        /// TELEMETRIA
         // Copiamos la lista de Circulos al vector de posiciones
         Vector3[] aux = new Vector3[points.Count];
-        for(int i = 0; i < circles.Count; i++)
+        for (int i = 0; i < circles.Count; i++)
         {
             Transform t = circles[i].transform;
             Vector3 v = new Vector3(t.position.x, t.position.y);
@@ -219,25 +218,20 @@ public class Window_Graph : MonoBehaviour
         // Creamos la linea 
         line_renderer.positionCount = points.Count;
         line_renderer.SetPositions(aux);
-    }
 
-    // Añade un nuevo punto a la grafica
-    public void AddPoint(float new_y)
-    {
-        // Añadimos el nuevo punto
-        points.Add(new_y);
-        CheckMove(new Vector2(points.Count - 1, new_y));
-        Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
-        // Lo creamos
-        float y_pos = (points[points.Count-1] / y_max) * graph_Height;
-        //float y_pos = points[points.Count-1];
-        GameObject point_object = CreateCircle(new Vector2(x_pos, y_pos));
-        circles.Add(point_object);
-        x_pos += x_size;
+        /// OBJETIVO
+        // Copiamos la lista de Circulos al vector de posiciones
+        Vector3[] aux_o = new Vector3[objective_index];
+        for (int i = 0; i < objective_index; i++)
+        {
+            Transform t = objetive_circles[i].transform;
+            Vector3 v = new Vector3(t.position.x, t.position.y);
+            aux_o[i] = v;
+        }
 
-
-        // Lo unimos a la grafica
-        CreateLine();
+        // Creamos la linea 
+        objetive_line_renderer.positionCount = objective_index;
+        objetive_line_renderer.SetPositions(aux_o);
     }
 
     // Desplaza la Grafica a la Izquierda 1 posicion
@@ -255,23 +249,40 @@ public class Window_Graph : MonoBehaviour
 
     private void CheckMove(Vector2 newPoint)
     {
+        // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
         if(newPoint.y > y_max)
         {
-            
             y_max = newPoint.y;
             ReScalePoints();
         }
-        else if (newPoint.y < actual_y_min)
-        {
-            //MoveDown();
-            actual_y_min = newPoint.y;
-        }
 
-        if(newPoint.x > actual_x_max)
+        // Si Añadimos un nuevo punto y hay que desplazar la Grafica
+        if(newPoint.x > x_max)
         {
             MoveLeft();
-            actual_x_max = newPoint.x;
+            x_max = newPoint.x;
         }    
+    }
+
+    // Crea un circulo, pàra representar graficamente un punto
+    GameObject CreateCircle(Vector2 pos)
+    {
+        // Creamos una Imagen
+        GameObject game_Object = new GameObject("Point");
+        game_Object.AddComponent<Image>();
+        game_Object.transform.SetParent(points_container.transform, false);
+
+        // Seteamos la imagen 
+        game_Object.GetComponent<Image>().sprite = circle_sprite;
+
+        // Seteamos su posicion
+        RectTransform rect = game_Object.GetComponent<RectTransform>();
+        rect.anchoredPosition = pos;
+        rect.sizeDelta = new Vector2(circle_scale, circle_scale);
+        rect.anchorMin = new Vector2(0, 0);
+        rect.anchorMax = new Vector2(0, 0);
+
+        return game_Object;
     }
 
     private float getMaxFromList()
@@ -289,10 +300,24 @@ public class Window_Graph : MonoBehaviour
             Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
             rect.anchoredPosition = pos;
         }
+        for (int i = 0; i < objetive_circles.Count; i++)
+        {
+            RectTransform rect = objetive_circles[i].GetComponent<RectTransform>();
+            float y_pos = (objetive_points[i] / y_max) * graph_Height;
+            Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+            rect.anchoredPosition = pos;
+        }
 
-        for(int i = 0; i < label_Y_List.Length; i++)
+        for (int i = 0; i < label_Y_List.Length; i++)
         {
             label_Y_List[i].text = ((y_max / y_segments) * i).ToString();
         }
+    }
+
+    // Inicializa la lista de puntos del Diseñador (Llamar desde la persistencia al crear)
+    // He puesto que pasais una lista, si pasais un vector pos lo cambiais jeje
+    public void SetObjetiveLine(List<float> o)
+    {
+        objetive_points = new List<float>(o);
     }
 }
