@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+using static UnityEditor.PlayerSettings;
 
 public class Window_Graph : MonoBehaviour
 {
@@ -40,7 +42,7 @@ public class Window_Graph : MonoBehaviour
     LineRenderer line_renderer;
 
     // Puntos del diseñador
-    List<float> objetive_points;
+    List<float> objetive_points = new List<float>{10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
     [SerializeField]
     LineRenderer objetive_line_renderer;
 
@@ -51,11 +53,12 @@ public class Window_Graph : MonoBehaviour
 
     float graph_Height;
     float graph_Width;
-    float y_max = 100f;// puntos de Y
-    float x_size = 50f;// distancia entre puntos de X
+    float x_size; // distancia entre puntos de X
     float x_pos = 0;
+    float y_size;
 
     int visualize_points = 10; // numero de puntos que se van a representar como maximo a la vez en la grafica
+    int y_segments = 8; // numero de separaciones que tiene el Eje Y
     // |-------------*-
     // |-------*------- 
     // |----*-----*----
@@ -71,10 +74,24 @@ public class Window_Graph : MonoBehaviour
     float actual_y_max;
     float actual_y_min;
     float actual_x_max;
+    //
+    float last_x;
+    float last_y;
+
+    float y_max = 100f; // Valor maximo que puede alcanzar el Eje Y 
+                        // Inicialmente lo determina el mayor valor de la grafica del diseñador
+                        // Posteriormente se actualiza si aparecen valores mayores
+
+    int acostada = 1;
+
+    TextMeshProUGUI[] label_Y_List;
+    List<TextMeshProUGUI> label_X_List;
 
 
     private void Awake()
     {
+        label_Y_List = new TextMeshProUGUI[y_segments + 1];
+
         // Altura del grid
         graph_Height = graph_container.sizeDelta.y;
         // Ancho del grid
@@ -84,12 +101,13 @@ public class Window_Graph : MonoBehaviour
 
         circles = new List<GameObject>();
         points = new List<float>();
-        Debug.Log(circles.Count);
-        Debug.Log(points.Count);
+        label_X_List = new List<TextMeshProUGUI>();
 
         actual_x_max = visualize_points;
         actual_y_max = y_max;
         actual_y_min = 0;
+
+        y_max = getMaxFromList();
 
         ShowGraph();
     }
@@ -101,17 +119,22 @@ public class Window_Graph : MonoBehaviour
         {
             AddPoint(Random.Range(0, 100));
         }
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            AddPoint(acostada);
+            acostada *= 2;
+        }
         if (Input.GetKeyDown(KeyCode.A))
         {
             MoveLeft();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            MoveDown();
+            //MoveDown();
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            MoveUp();
+           // MoveUp();
         }
     }
 
@@ -138,22 +161,13 @@ public class Window_Graph : MonoBehaviour
 
     void ShowGraph()
     {
-        //ClearGraph();
-
-        // Recorremos todos los puntos colocandolos
-        //for (int i = 0; i < points.Count; i++)
-        //{
-        //    // Solo coloca los puntos
-        //    AddPoint(points[i]);
-
-        //}
-
-        // Separador Eje X
         x_size = graph_Width / visualize_points;
-        float y_size = graph_Height / visualize_points;
+        y_size = graph_Height / y_segments;
 
         float x = 0;
         float y = x;
+
+        // MARCADORES EJE X
         for (int i = 0; i < visualize_points + 1; i++)
         {
             RectTransform dashX = Instantiate(dash_template_X, lines_container.transform);
@@ -163,32 +177,30 @@ public class Window_Graph : MonoBehaviour
             RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
             labelX.anchoredPosition = new Vector2(x, 0); 
             labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
+            label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
 
             x += x_size;
+        }
 
+        // MARCADORES EJE Y
+        for (int i = 0; i < y_segments + 1; i++)
+        {
 
             RectTransform dashY = Instantiate(dash_template_Y, lines_container.transform);
-            dashY.anchoredPosition = new Vector2(0, y); 
+            dashY.anchoredPosition = new Vector2(0, y);
             dashY.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Width);
 
             RectTransform labelY = Instantiate(label_template_Y, label_Y_container.transform);
             labelY.anchoredPosition = new Vector2(0, y);
-            labelY.GetComponent<TextMeshProUGUI>().text = i.ToString();
+            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / y_segments) * i).ToString();
 
             y += y_size;
+
+            label_Y_List[i] = labelY.GetComponent<TextMeshProUGUI>();
         }
 
-
-
-
     }
 
-    private float GetAngle(Vector2 point1, Vector2 point2)
-    {
-        Vector2 direction = point2 - point1;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        return angle;
-    }
 
     // Crea la linea que une todos los puntos
     // Solo dibuja la linea entre los puntos que se renderizan dentro del viewport
@@ -214,14 +226,15 @@ public class Window_Graph : MonoBehaviour
     {
         // Añadimos el nuevo punto
         points.Add(new_y);
-
+        CheckMove(new Vector2(points.Count - 1, new_y));
+        Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
         // Lo creamos
         float y_pos = (points[points.Count-1] / y_max) * graph_Height;
+        //float y_pos = points[points.Count-1];
         GameObject point_object = CreateCircle(new Vector2(x_pos, y_pos));
         circles.Add(point_object);
         x_pos += x_size;
 
-        CheckMove(new Vector2(points.Count - 1, new_y));
 
         // Lo unimos a la grafica
         CreateLine();
@@ -233,42 +246,24 @@ public class Window_Graph : MonoBehaviour
         // Movemos el container
         left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x - x_size, left_container.anchoredPosition.y);
 
-        // Redibujamos
-        CreateLine();
-    }
-    // Desplaza la Grafica hacia Abajo 1 posicion
-    private void MoveDown()
-    {
-        float y_size = graph_Height / visualize_points;
-        // Movemos el container
-        RectTransform rectY = label_Y_container.GetComponent<RectTransform>();
-        left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x, left_container.anchoredPosition.y - y_size);
-        rectY.anchoredPosition = new Vector2(rectY.anchoredPosition.x, rectY.anchoredPosition.y - y_size);
-        // Redibujamos
-        CreateLine();
-    }
-    private void MoveUp()
-    {
-        float y_size = graph_Height / visualize_points;
-        // Movemos el container
-        RectTransform rectY = label_Y_container.GetComponent<RectTransform>();
-        left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x, left_container.anchoredPosition.y + y_size);
-        rectY.anchoredPosition = new Vector2(rectY.anchoredPosition.x, rectY.anchoredPosition.y + y_size);
-
-        // Redibujamos
-        CreateLine();
+        // Añadimos el nuevo marcador abajo
+        RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
+        labelX.anchoredPosition = new Vector2(x_pos, 0);
+        labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString();
+        label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
     }
 
     private void CheckMove(Vector2 newPoint)
     {
-        if(newPoint.y > actual_y_max)
+        if(newPoint.y > y_max)
         {
-            MoveUp();
-            actual_y_max = newPoint.y;
+            
+            y_max = newPoint.y;
+            ReScalePoints();
         }
         else if (newPoint.y < actual_y_min)
         {
-            MoveDown();
+            //MoveDown();
             actual_y_min = newPoint.y;
         }
 
@@ -279,4 +274,25 @@ public class Window_Graph : MonoBehaviour
         }    
     }
 
+    private float getMaxFromList()
+    {
+        return objetive_points.Max();
+    }
+
+    // Re Escalamos los puntos para que se ajusten a los nuevos valores maximos del eje Y
+    private void ReScalePoints()
+    {
+        for(int i = 0; i < circles.Count; i++)
+        {
+            RectTransform rect = circles[i].GetComponent<RectTransform>();
+            float y_pos = (points[i] / y_max) * graph_Height;
+            Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+            rect.anchoredPosition = pos;
+        }
+
+        for(int i = 0; i < label_Y_List.Length; i++)
+        {
+            label_Y_List[i].text = ((y_max / y_segments) * i).ToString();
+        }
+    }
 }
