@@ -81,7 +81,8 @@ public class Window_Graph : MonoBehaviour
 
 
     // Renderizado dentro del Viewport
-    
+    [SerializeField]
+    ScrollRect render_viewport;
 
 
     private void Start()
@@ -205,33 +206,58 @@ public class Window_Graph : MonoBehaviour
     // Ahora como esta hay que cambiarlo
     private void CreateLine()
     {
-        /// TELEMETRIA
-        // Copiamos la lista de Circulos al vector de posiciones
-        Vector3[] aux = new Vector3[points.Count];
+        // MUCHO BUCLE, IGUAL HAY QUE CAMBIARLO //
+
+        /// TELEMETRIA ///
+        // Creamos una lista de Posiciones dentro del Viewport
+        List<Vector3> aux = new List<Vector3>();
         for (int i = 0; i < circles.Count; i++)
         {
             Transform t = circles[i].transform;
-            Vector3 v = new Vector3(t.position.x, t.position.y);
-            aux[i] = v;
+
+            // Comprobamos que el punto se este renderizando en el Viewport
+            if (RectTransformUtility.RectangleContainsScreenPoint(render_viewport.viewport, t.position))
+            {
+                Vector3 v = new Vector3(t.position.x, t.position.y);
+                aux.Add(v);
+            }
+        }
+        // Volcamos la lista en un vector
+        Vector3[] aux_def = new Vector3[aux.Count];
+        for(int i = 0; i < aux.Count; i++)
+        {
+            aux_def[i] = aux[i];
         }
 
-        // Creamos la linea 
-        line_renderer.positionCount = points.Count;
-        line_renderer.SetPositions(aux);
 
-        /// OBJETIVO
-        // Copiamos la lista de Circulos al vector de posiciones
-        Vector3[] aux_o = new Vector3[objective_index];
+        // Creamos la linea 
+        line_renderer.positionCount = aux.Count;
+        line_renderer.SetPositions(aux_def);
+
+        /// OBJETIVO ///
+        // Creamos una lista de Posiciones dentro del Viewport
+        List<Vector3> aux_o = new List<Vector3>();
         for (int i = 0; i < objective_index; i++)
         {
             Transform t = objetive_circles[i].transform;
-            Vector3 v = new Vector3(t.position.x, t.position.y);
-            aux_o[i] = v;
+
+            // Comprobamos que el punto se este renderizando en el Viewport
+            if (RectTransformUtility.RectangleContainsScreenPoint(render_viewport.viewport, t.transform.position))
+            {
+                Vector3 v = new Vector3(t.position.x, t.position.y);
+                aux_o.Add(v);
+            }
+        }
+        // Volcamos la lista en un vector
+        Vector3[] aux_def_o = new Vector3[aux_o.Count];
+        for (int i = 0; i < aux_o.Count; i++)
+        {
+            aux_def_o[i] = aux_o[i];
         }
 
         // Creamos la linea 
-        objetive_line_renderer.positionCount = objective_index;
-        objetive_line_renderer.SetPositions(aux_o);
+        objetive_line_renderer.positionCount = aux_o.Count;
+        objetive_line_renderer.SetPositions(aux_def_o);
     }
 
     // Desplaza la Grafica a la Izquierda 1 posicion
