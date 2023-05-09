@@ -26,6 +26,12 @@ public class Window_Graph : MonoBehaviour
     GameObject points_container;
     [SerializeField]
     GameObject lines_container;
+    [SerializeField]
+    GameObject label_X_container;
+    [SerializeField]
+    GameObject label_Y_container;
+    [SerializeField]
+    RectTransform left_container;
 
 
     // Puntos de la telemetria
@@ -60,6 +66,13 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     GameObject separator_line_renderer;
 
+
+    // 
+    float actual_y_max;
+    float actual_y_min;
+    float actual_x_max;
+
+
     private void Awake()
     {
         // Altura del grid
@@ -73,15 +86,32 @@ public class Window_Graph : MonoBehaviour
         points = new List<float>();
         Debug.Log(circles.Count);
         Debug.Log(points.Count);
+
+        actual_x_max = visualize_points;
+        actual_y_max = y_max;
+        actual_y_min = 0;
+
         ShowGraph();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             AddPoint(Random.Range(0, 100));
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            MoveLeft();
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            MoveDown();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            MoveUp();
         }
     }
 
@@ -124,26 +154,31 @@ public class Window_Graph : MonoBehaviour
 
         float x = 0;
         float y = x;
-        for (int i = 0; i < visualize_points; i++)
+        for (int i = 0; i < visualize_points + 1; i++)
         {
             RectTransform dashX = Instantiate(dash_template_X, lines_container.transform);
-            dashX.anchoredPosition = new Vector2(x, 0); // le casca un 7 el men, luego lo cambio
+            dashX.anchoredPosition = new Vector2(x, 0);
             dashX.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Height);
+
+            RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
+            labelX.anchoredPosition = new Vector2(x, 0); 
+            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
+
             x += x_size;
 
 
             RectTransform dashY = Instantiate(dash_template_Y, lines_container.transform);
-            dashY.anchoredPosition = new Vector2(0, y); // le casca un 7 el men, luego lo cambio
+            dashY.anchoredPosition = new Vector2(0, y); 
             dashY.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Width);
+
+            RectTransform labelY = Instantiate(label_template_Y, label_Y_container.transform);
+            labelY.anchoredPosition = new Vector2(0, y);
+            labelY.GetComponent<TextMeshProUGUI>().text = i.ToString();
+
             y += y_size;
         }
 
 
-        // Añadimos el marcador X
-        //RectTransform labelX = Instantiate(label_template_X);
-        //labelX.SetParent(graph_container, false);
-        //labelX.anchoredPosition = new Vector2(x_pos, -7f); // le casca un 7 el men, luego lo cambio
-        //labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
 
 
     }
@@ -186,34 +221,62 @@ public class Window_Graph : MonoBehaviour
         circles.Add(point_object);
         x_pos += x_size;
 
+        CheckMove(new Vector2(points.Count - 1, new_y));
+
         // Lo unimos a la grafica
         CreateLine();
     }
 
+    // Desplaza la Grafica a la Izquierda 1 posicion
+    private void MoveLeft()
+    {
+        // Movemos el container
+        left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x - x_size, left_container.anchoredPosition.y);
 
-    //// Añadimos el marcador X
-    //RectTransform labelX = Instantiate(label_template_X);
-    //labelX.SetParent(graph_container, false);
-    //labelX.anchoredPosition = new Vector2(x_pos, -7f); // le casca un 7 el men, luego lo cambio
-    //labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
+        // Redibujamos
+        CreateLine();
+    }
+    // Desplaza la Grafica hacia Abajo 1 posicion
+    private void MoveDown()
+    {
+        float y_size = graph_Height / visualize_points;
+        // Movemos el container
+        RectTransform rectY = label_Y_container.GetComponent<RectTransform>();
+        left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x, left_container.anchoredPosition.y - y_size);
+        rectY.anchoredPosition = new Vector2(rectY.anchoredPosition.x, rectY.anchoredPosition.y - y_size);
+        // Redibujamos
+        CreateLine();
+    }
+    private void MoveUp()
+    {
+        float y_size = graph_Height / visualize_points;
+        // Movemos el container
+        RectTransform rectY = label_Y_container.GetComponent<RectTransform>();
+        left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x, left_container.anchoredPosition.y + y_size);
+        rectY.anchoredPosition = new Vector2(rectY.anchoredPosition.x, rectY.anchoredPosition.y + y_size);
 
-    //// Añadimos el separador X
-    //RectTransform dashX = Instantiate(dash_template_X);
-    //dashX.SetParent(graph_container, false);
-    //dashX.anchoredPosition = new Vector2(x_pos, -7f); // le casca un 7 el men, luego lo cambio
+        // Redibujamos
+        CreateLine();
+    }
 
-    // Añadir el marcador de la Y
-    //for(int i = 0; i <= y_separator; i++)
-    //{
-    //    RectTransform labelX = Instantiate(label_template_Y);
-    //    labelX.SetParent(graph_container, false);
-    //    float n = i * (1f / y_separator);
-    //    labelX.anchoredPosition = new Vector2(-1000f, n * graph_Height); // le casca un 7 el men, luego lo cambio
-    //    labelX.GetComponent<TextMeshProUGUI>().text = (n * y_max).ToString();
+    private void CheckMove(Vector2 newPoint)
+    {
+        if(newPoint.y > actual_y_max)
+        {
+            MoveUp();
+            actual_y_max = newPoint.y;
+        }
+        else if (newPoint.y < actual_y_min)
+        {
+            MoveDown();
+            actual_y_min = newPoint.y;
+        }
 
-    //    // Añadimos el separador Y
-    //    RectTransform dashX = Instantiate(dash_template_Y);
-    //    dashX.SetParent(graph_container, false);
-    //    dashX.anchoredPosition = new Vector2(-7f, n * graph_Height); // le casca un 7 el men, luego lo cambio
-    //}
+        if(newPoint.x > actual_x_max)
+        {
+            MoveLeft();
+            actual_x_max = newPoint.x;
+        }    
+    }
+
 }
