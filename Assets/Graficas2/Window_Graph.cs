@@ -22,15 +22,18 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform dash_template_Y;
 
+    [SerializeField]
+    GameObject points_container;
+    [SerializeField]
+    GameObject lines_container;
+
 
     // Puntos de la telemetria
-    [SerializeField]
     List<float> points;
     [SerializeField]
     LineRenderer line_renderer;
 
     // Puntos del diseñador
-    [SerializeField]
     List<float> objetive_points;
     [SerializeField]
     LineRenderer objetive_line_renderer;
@@ -41,16 +44,31 @@ public class Window_Graph : MonoBehaviour
     List<GameObject> circles;
 
     float graph_Height;
+    float graph_Width;
     float y_max = 100f;// puntos de Y
     float x_size = 50f;// distancia entre puntos de X
     float x_pos = 0;
+
+    int visualize_points = 10; // numero de puntos que se van a representar como maximo a la vez en la grafica
+    // |-------------*-
+    // |-------*------- 
+    // |----*-----*----
+    // |-*-------------
+    // +---------------
+    // Los puntos se van ocultando por la izquierda <- <- <-
+
+    [SerializeField]
+    GameObject separator_line_renderer;
 
     private void Awake()
     {
         // Altura del grid
         graph_Height = graph_container.sizeDelta.y;
+        // Ancho del grid
+        graph_Width = graph_container.sizeDelta.x;
 
-        line_renderer.positionCount = points.Count;
+        visualize_points--;
+
         circles = new List<GameObject>();
         points = new List<float>();
         Debug.Log(circles.Count);
@@ -71,9 +89,9 @@ public class Window_Graph : MonoBehaviour
     GameObject CreateCircle(Vector2 pos)
     {
         // Creamos una Imagen
-        GameObject game_Object = new GameObject();
+        GameObject game_Object = new GameObject("Point");
         game_Object.AddComponent<Image>();
-        game_Object.transform.SetParent(graph_container.transform, false);
+        game_Object.transform.SetParent(points_container.transform, false);
 
         // Seteamos la imagen 
         game_Object.GetComponent<Image>().sprite = circle_sprite;
@@ -99,6 +117,34 @@ public class Window_Graph : MonoBehaviour
         //    AddPoint(points[i]);
 
         //}
+
+        // Separador Eje X
+        x_size = graph_Width / visualize_points;
+        float y_size = graph_Height / visualize_points;
+
+        float x = 0;
+        float y = x;
+        for (int i = 0; i < visualize_points; i++)
+        {
+            RectTransform dashX = Instantiate(dash_template_X, lines_container.transform);
+            dashX.anchoredPosition = new Vector2(x, 0); // le casca un 7 el men, luego lo cambio
+            dashX.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Height);
+            x += x_size;
+
+
+            RectTransform dashY = Instantiate(dash_template_Y, lines_container.transform);
+            dashY.anchoredPosition = new Vector2(0, y); // le casca un 7 el men, luego lo cambio
+            dashY.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Width);
+            y += y_size;
+        }
+
+
+        // Añadimos el marcador X
+        //RectTransform labelX = Instantiate(label_template_X);
+        //labelX.SetParent(graph_container, false);
+        //labelX.anchoredPosition = new Vector2(x_pos, -7f); // le casca un 7 el men, luego lo cambio
+        //labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
+
 
     }
 
