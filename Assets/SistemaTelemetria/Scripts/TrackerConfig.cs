@@ -14,7 +14,7 @@ public class TrackerConfig : MonoBehaviour
         public bool isTracked;
     }
     [SerializeField]
-    EventConfig[] eventConfig;
+    public EventConfig[] eventConfig;
 
     // Diccionario para comprobar rápidamente si debe trackearse un evento durante ejecución
     public Dictionary<string, bool> eventsTracked = new Dictionary<string, bool>();
