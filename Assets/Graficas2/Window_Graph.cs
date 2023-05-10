@@ -18,7 +18,8 @@ public class Window_Graph : MonoBehaviour
     LineRenderer line_renderer;
 
     // Puntos del diseñador
-    List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
+    //List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
+    public List<float> objetive_points;
     [SerializeField]
     LineRenderer objetive_line_renderer;
 
@@ -111,7 +112,7 @@ public class Window_Graph : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             AddPoint(Random.Range(0, 100));
         }
@@ -138,7 +139,7 @@ public class Window_Graph : MonoBehaviour
             dashX.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Height);
 
             RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
-            labelX.anchoredPosition = new Vector2(x, 0); 
+            labelX.anchoredPosition = new Vector2(x, 0);
             labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
             label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
 
@@ -174,18 +175,18 @@ public class Window_Graph : MonoBehaviour
         Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
 
         // Lo creamos
-        float y_pos = (points[points.Count-1] / y_max) * graph_Height;
+        float y_pos = (points[points.Count - 1] / y_max) * graph_Height;
         GameObject point_object = CreateCircle(new Vector2(x_pos, y_pos));
         circles.Add(point_object);
 
 
         /// PUNTO OBJETIVO
         // Añadimos el nuevo punto
-        if(objetive_points.Count > points.Count)
+        if (objetive_points.Count >= points.Count)
         {
             CheckMove(new Vector2(objective_index, new_y));
             Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
-            Debug.Log("P: " + points.Count   + "  O:" + objetive_points.Count);
+            Debug.Log("P: " + points.Count + "  O:" + objetive_points.Count);
 
             // Lo creamos
             float o_y_pos = (objetive_points[objective_index] / y_max) * graph_Height;
@@ -195,8 +196,8 @@ public class Window_Graph : MonoBehaviour
         }
 
         x_pos += x_size;
-        
-        
+
+
         // Lo unimos a la grafica
         CreateLine();
     }
@@ -224,7 +225,7 @@ public class Window_Graph : MonoBehaviour
         }
         // Volcamos la lista en un vector
         Vector3[] aux_def = new Vector3[aux.Count];
-        for(int i = 0; i < aux.Count; i++)
+        for (int i = 0; i < aux.Count; i++)
         {
             aux_def[i] = aux[i];
         }
@@ -276,18 +277,18 @@ public class Window_Graph : MonoBehaviour
     private void CheckMove(Vector2 newPoint)
     {
         // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
-        if(newPoint.y > y_max)
+        if (newPoint.y > y_max)
         {
             y_max = newPoint.y;
             ReScalePoints();
         }
 
         // Si Añadimos un nuevo punto y hay que desplazar la Grafica
-        if(newPoint.x > x_max)
+        if (newPoint.x > x_max)
         {
             MoveLeft();
             x_max = newPoint.x;
-        }    
+        }
     }
 
     // Crea un circulo, pàra representar graficamente un punto
@@ -319,7 +320,7 @@ public class Window_Graph : MonoBehaviour
     // Re Escalamos los puntos para que se ajusten a los nuevos valores maximos del eje Y
     private void ReScalePoints()
     {
-        for(int i = 0; i < circles.Count; i++)
+        for (int i = 0; i < circles.Count; i++)
         {
             RectTransform rect = circles[i].GetComponent<RectTransform>();
             float y_pos = (points[i] / y_max) * graph_Height;
