@@ -9,21 +9,23 @@ using System.Linq;
 using static UnityEngine.GraphicsBuffer;
 using System.Net.Security;
 using Newtonsoft.Json.Linq;
+using Unity.VisualScripting;
+using UnityEngine.UI;
+
+[Serializable]
+public struct graph
+{
+    public string name;
+    [HideInInspector]
+    public string eventX;
+    [HideInInspector]
+    public string eventY;
+    public AnimationCurve myCurve;
+    public GameObject window_graph;
+}
 
 public class GraphPersistence : IPersistence
 {
-    [Serializable]
-    public struct graph
-    {
-        public string name;
-        [HideInInspector]
-        public string eventX;
-        [HideInInspector]
-        public string eventY;
-        public AnimationCurve myCurve;
-        public Window_Graph window_Graph;
-    }
-
     List<TrackerEvent> eventsBuff;
 
     [SerializeField]
@@ -31,8 +33,26 @@ public class GraphPersistence : IPersistence
 
     private void Start()
     {
+
         eventsBuff = new();
         Keyframe k = (Keyframe)(graphs[0].myCurve.keys.GetValue(0));
+
+        // Crear un nuevo objeto Canvas
+        GameObject canvasObject = new GameObject("Canvas");
+        canvasObject.AddComponent<CanvasScaler>();              // Agregar el componente gráfico CanvasScaler al objeto Canvas
+        canvasObject.AddComponent<GraphicRaycaster>();          // Agregar el componente gráfico GraphicRaycaster al objeto Canvas
+        canvasObject.transform.SetParent(transform, false);     // Hacer que el objeto Canvas sea hijo del objeto padre
+        canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
+        canvasObject.GetComponent<Canvas>().worldCamera = Camera.main;
+        canvasObject.GetComponent<Canvas>().scaleFactor = 0.8f;  //!CUIDAO
+        //Crear un   
+        for (int i = 0; i < graphs.Count(); ++i)
+        {
+            // Crear un nuevo window_graph por cada grafica hijo del objeto Canvas
+            GameObject window = Instantiate(graphs[i].window_graph);
+            window.transform.SetParent(canvasObject.transform, false);
+            graphs[i].window_graph = window;
+        }
 
         //Pasar a una lista todos los valores de los keyframes de la grafica
         List<float> objetiveLineAux = new List<float>();
@@ -41,7 +61,7 @@ public class GraphPersistence : IPersistence
             float aux = graphs[0].myCurve.Evaluate(i);
             objetiveLineAux.Add(aux);
         }
-        graphs[0].window_Graph.SetObjetiveLine(objetiveLineAux);
+        graphs[0].window_graph.GetComponent<Window_Graph>().SetObjetiveLine(objetiveLineAux);
     }
 
     private void Update()
@@ -80,6 +100,8 @@ public class GraphPersistenceEditor : Editor
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(graphPersistence.graphs[i].name, EditorStyles.boldLabel);
+
+            ////Editado
             //graphPersistence.graphs[i].name = EditorGUILayout.TextField("Name", graphPersistence.graphs[i].name);
             //graphPersistence.graphs[i].eventX = EditorGUILayout.TextField("Event X", graphPersistence.graphs[i].eventX);
             //graphPersistence.graphs[i].eventY = EditorGUILayout.TextField("Event Y", graphPersistence.graphs[i].eventY);
