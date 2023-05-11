@@ -21,10 +21,10 @@ public class Graph : MonoBehaviour
         window_graph = window_graph_object.GetComponent<Window_Graph>();
     }
 
-    public void setupWindowGraph()
+    public void setupWindowGraphConfig()
     {
+        window_graph.graph_Height = graphInfo.graph_Height;
         window_graph.graph_Width = graphInfo.graph_Width;
-        window_graph.graph_Width = graphInfo.graph_Height;
         window_graph.x_segments = graphInfo.x_segments;
         window_graph.y_segments = graphInfo.y_segments;
         SetUpObjetiveLine();

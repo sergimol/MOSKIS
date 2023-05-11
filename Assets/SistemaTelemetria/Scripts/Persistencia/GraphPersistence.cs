@@ -11,6 +11,7 @@ using System.Net.Security;
 using Newtonsoft.Json.Linq;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using UnityEditor.PackageManager.UI;
 
 [Serializable]
 public struct GraphConfig
@@ -60,10 +61,12 @@ public class GraphPersistence : IPersistence
         canvasObject.GetComponent<Canvas>().scaleFactor = 0.8f;  //!CUIDAO
 
         //Crear tantos Graph como se han configurado y pasarles la información
-        Array.Resize(ref graphs, graphsConfig.Count() + 1);
+        Array.Resize(ref graphs, graphsConfig.Count());
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
             graphs[i] = Instantiate(graphObject).GetComponent<Graph>();
+            graphs[i].name = graphsConfig[i].name;
+            graphs[i].transform.SetParent(this.transform, false);
             graphs[i].graphInfo = graphsConfig[i];
             graphs[i].SetUpWindowGraph(canvasObject);
         }
@@ -71,7 +74,7 @@ public class GraphPersistence : IPersistence
         //Pasar a una lista todos los valores de los keyframes de la grafica
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
-            graphs[i].SetUpObjetiveLine();
+            graphs[i].setupWindowGraphConfig();
         }
     }
 
@@ -138,8 +141,6 @@ public class GraphPersistenceEditor : Editor
             graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("graph_Width", graphPersistence.graphsConfig[i].graph_Width);
             graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("x_segments", graphPersistence.graphsConfig[i].x_segments);
             graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("y_segments", graphPersistence.graphsConfig[i].y_segments);
-
-
         }
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
