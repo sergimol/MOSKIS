@@ -48,15 +48,15 @@ public class Window_Graph : MonoBehaviour
     RectTransform dash_template_Y;
 
     // Dimensiones del Grafico
-    float graph_Height;
-    float graph_Width;
+    public float graph_Height;
+    public float graph_Width;
 
     float x_size; // distancia entre puntos de X
     float y_size; // distancia entre puntos de Y
     float x_pos = 0;
 
-    int x_segments = 10; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
-    int y_segments = 8; // numero de separaciones que tiene el Eje Y
+    public int x_segments = 10; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
+    public int y_segments = 8; // numero de separaciones que tiene el Eje Y
     // |-------------*-
     // |-------*------- 
     // |----*-----*----

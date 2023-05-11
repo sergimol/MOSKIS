@@ -147,40 +147,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a27a00e2f9f3749bf0a6724799183d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphs:
-  - name: Gr1
+  graphObject: {fileID: 5003983758475538796, guid: 34ff7c8fdddb2df4c8b4a76f20005354, type: 3}
+  graphsConfig:
+  - name: Grafica 0
     eventX: Inicio
     eventY: Fin
     myCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 3.4595237
-        value: 3.904084
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 7.4074693
-        value: 7.4256043
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    window_graph: {fileID: 0}
+    graph_Height: 500
+    graph_Width: 200
+    x_segments: 11
+    y_segments: 8

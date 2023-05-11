@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine.UI;
 
 [Serializable]
-public struct graph
+public struct GraphConfig
 {
     public string name;
     [HideInInspector]
@@ -21,21 +21,34 @@ public struct graph
     [HideInInspector]
     public string eventY;
     public AnimationCurve myCurve;
+    [HideInInspector]
     public GameObject window_graph;
+    //Config del window_graph
+    [HideInInspector]
+    public float graph_Height;
+    [HideInInspector]
+    public float graph_Width;
+    [HideInInspector]
+    public int x_segments; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
+    [HideInInspector]
+    public int y_segments; // numero de separaciones que tiene el Eje Y
 }
 
 public class GraphPersistence : IPersistence
 {
     List<TrackerEvent> eventsBuff;
 
-    [SerializeField]
-    public graph[] graphs;
+    public GameObject graphObject;
+
+    //La configuracion inicial de todos los graphs desde el editor
+    public GraphConfig[] graphsConfig;
+
+    Graph[] graphs;
 
     private void Start()
     {
-
         eventsBuff = new();
-        Keyframe k = (Keyframe)(graphs[0].myCurve.keys.GetValue(0));
+        Keyframe k = (Keyframe)(graphsConfig[0].myCurve.keys.GetValue(0));
 
         // Crear un nuevo objeto Canvas
         GameObject canvasObject = new GameObject("Canvas");
@@ -45,23 +58,21 @@ public class GraphPersistence : IPersistence
         canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         canvasObject.GetComponent<Canvas>().worldCamera = Camera.main;
         canvasObject.GetComponent<Canvas>().scaleFactor = 0.8f;  //!CUIDAO
-        //Crear un   
-        for (int i = 0; i < graphs.Count(); ++i)
+
+        //Crear tantos Graph como se han configurado y pasarles la información
+        Array.Resize(ref graphs, graphsConfig.Count() + 1);
+        for (int i = 0; i < graphsConfig.Count(); ++i)
         {
-            // Crear un nuevo window_graph por cada grafica hijo del objeto Canvas
-            GameObject window = Instantiate(graphs[i].window_graph);
-            window.transform.SetParent(canvasObject.transform, false);
-            graphs[i].window_graph = window;
+            graphs[i] = Instantiate(graphObject).GetComponent<Graph>();
+            graphs[i].graphInfo = graphsConfig[i];
+            graphs[i].SetUpWindowGraph(canvasObject);
         }
 
         //Pasar a una lista todos los valores de los keyframes de la grafica
-        List<float> objetiveLineAux = new List<float>();
-        for (int i = 0; i < graphs[0].myCurve.length; ++i)
+        for (int i = 0; i < graphsConfig.Count(); ++i)
         {
-            float aux = graphs[0].myCurve.Evaluate(i);
-            objetiveLineAux.Add(aux);
+            graphs[i].SetUpObjetiveLine();
         }
-        graphs[0].window_graph.GetComponent<Window_Graph>().SetObjetiveLine(objetiveLineAux);
     }
 
     private void Update()
@@ -93,13 +104,13 @@ public class GraphPersistenceEditor : Editor
         GraphPersistence graphPersistence = (GraphPersistence)target;
 
         // Crea un campo para el arreglo graphs en GraphPersistence
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("graphs"), true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("graphsConfig"), true);
 
         // Crea un menú dropdown para cada elemento de graphs
-        for (int i = 0; i < graphPersistence.graphs.Length; i++)
+        for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(graphPersistence.graphs[i].name, EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(graphPersistence.graphsConfig[i].name, EditorStyles.boldLabel);
 
             ////Editado
             //graphPersistence.graphs[i].name = EditorGUILayout.TextField("Name", graphPersistence.graphs[i].name);
@@ -115,14 +126,23 @@ public class GraphPersistenceEditor : Editor
             }
 
             // Crea un menú dropdown con los nombres de los eventos
-            int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphs[i].eventX);
+            int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX);
             selectedEventIndex = EditorGUILayout.Popup("Select Event X", selectedEventIndex, eventNames.ToArray());
-            graphPersistence.graphs[i].eventX = eventNames[selectedEventIndex];
+            graphPersistence.graphsConfig[i].eventX = eventNames[selectedEventIndex];
 
-            selectedEventIndex = eventNames.IndexOf(graphPersistence.graphs[i].eventY);
+            selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventY);
             selectedEventIndex = EditorGUILayout.Popup("Select Event Y", selectedEventIndex, eventNames.ToArray());
-            graphPersistence.graphs[i].eventY = eventNames[selectedEventIndex];
+            graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
+            //El resto de configuracion
+            graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("graph_Height", graphPersistence.graphsConfig[i].graph_Height);
+            graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("graph_Width", graphPersistence.graphsConfig[i].graph_Width);
+            graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("x_segments", graphPersistence.graphsConfig[i].x_segments);
+            graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("y_segments", graphPersistence.graphsConfig[i].y_segments);
+
+
         }
+        EditorGUILayout.Space();
+        graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
 
         // Guarda los cambios realizados en el editor
         serializedObject.ApplyModifiedProperties();
