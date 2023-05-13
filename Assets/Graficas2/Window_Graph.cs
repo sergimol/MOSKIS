@@ -355,9 +355,10 @@ public class Window_Graph : MonoBehaviour
             float y_pos = (points[i] / y_max) * graphConfig.graph_Height;
 
             // Si está activo el escalado en x el nuevo vector deberá calcular la nueva posición en X también
-            if (scaling != Scaling.ONLY_Y)
+            // Si está activo el escalado con offset, se espera hasta llegar a los segmentos de X
+            if (scaling == Scaling.X_SCALING_START || (scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
-                float x_pos = ((float)i / circles.Count) * graphConfig.graph_Width;
+                float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
                 Vector2 pos = new Vector2(x_pos, y_pos);
                 rect.anchoredPosition = pos;
             }
@@ -374,9 +375,9 @@ public class Window_Graph : MonoBehaviour
             RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
             float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
 
-            if (scaling != Scaling.ONLY_Y)
+            if (scaling == Scaling.X_SCALING_START || (scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
-                float x_pos = ((float)i / objective_circles.Count) * graphConfig.graph_Width;
+                float x_pos = ((float)i / (objective_circles.Count - 1)) * graphConfig.graph_Width;
                 Vector2 pos = new Vector2(x_pos, y_pos);
                 rect.anchoredPosition = pos;
             }
@@ -393,12 +394,12 @@ public class Window_Graph : MonoBehaviour
             label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F2"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
         }
 
-        if (scaling != Scaling.ONLY_Y)
+        if (scaling == Scaling.X_SCALING_START || (scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
         {
             // Reescalado de los puntos en X que se actualiza cuando se añaden
             for (int i = 0; i < label_X_List.Count; i++)
             {
-                label_X_List[i].text = (((float)circles.Count / (float)graphConfig.x_segments) * i).ToString("F2");
+                label_X_List[i].text = (((float)(circles.Count - 1) / (float)graphConfig.x_segments) * i).ToString("F2");
             }
         }
         
