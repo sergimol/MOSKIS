@@ -6,8 +6,12 @@ using UnityEngine.UI;
 using System.Linq;
 using static UnityEditor.PlayerSettings;
 
+public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
+
 public class Window_Graph : MonoBehaviour
 {
+    public Scaling scaling;
+
     [SerializeField]
     Sprite circle_sprite;
     float circle_scale = 5;
@@ -177,7 +181,6 @@ public class Window_Graph : MonoBehaviour
         /// PUNTO TELEMETRIA
         // Añadimos el nuevo punto
         points.Add(new_y);
-        CheckMove(new Vector2(points.Count - 1, new_y));
         Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
 
         // Lo creamos
@@ -190,7 +193,7 @@ public class Window_Graph : MonoBehaviour
         // Añadimos el nuevo punto
         if (objective_points.Count >= points.Count)
         {
-            CheckMove(new Vector2(objective_index, new_y));
+            
             Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
             Debug.Log("P: " + points.Count + "  O:" + objective_points.Count);
 
@@ -200,6 +203,9 @@ public class Window_Graph : MonoBehaviour
             objective_circles.Add(o_point_object);
             objective_index++;
         }
+
+        // Se hace el check de los dos puntos a la vez para evitar reescalar dos veces
+        CheckMove(new Vector2(objective_index, new_y), new Vector2(points.Count - 1, new_y));
 
         x_pos += x_size;
 
@@ -280,20 +286,36 @@ public class Window_Graph : MonoBehaviour
         label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
     }
 
-    private void CheckMove(Vector2 newPoint)
+    private void CheckMove(Vector2 newPoint, Vector2 newPoint2)
     {
-        // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
-        if (newPoint.y > y_max)
+        Debug.LogError(scaling);
+        if (scaling != Scaling.ONLY_Y)
         {
-            y_max = newPoint.y;
+            if (newPoint.y > y_max)
+                y_max = newPoint.y;
+            if(newPoint2.y > y_max)
+                y_max = newPoint2.y;
+            // Si el escalado en X está activo se debe reescalar en cada nuevo punto añadido
             ReScalePoints();
         }
-
-        // Si Añadimos un nuevo punto y hay que desplazar la Grafica
-        if (newPoint.x > x_max)
+        else
         {
-            MoveLeft();
-            x_max = newPoint.x;
+            // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
+            if (newPoint.y > y_max || newPoint2.y > y_max)
+            {
+                // y_max se quedará con la Ý más grande de entre los dos puntos si hay al menos uno que supera la y_max anterior
+                y_max = newPoint.y > newPoint2.y ? newPoint.y : newPoint2.y;
+                ReScalePoints();
+            }
+
+            // Si Añadimos un nuevo punto y hay que desplazar la Grafica
+            if (newPoint.x > x_max || newPoint2.x > x_max)
+            {
+                MoveLeft();
+                // x_max será el más grande de los dos puntos
+                // Normalmente irán a la vez
+                x_max = newPoint.x > newPoint2.x ? newPoint.x : newPoint2.x;
+            }
         }
     }
 
@@ -326,25 +348,60 @@ public class Window_Graph : MonoBehaviour
     // Re Escalamos los puntos para que se ajusten a los nuevos valores maximos del eje Y
     private void ReScalePoints()
     {
+        // Escalado de los eventos del jugador
         for (int i = 0; i < circles.Count; i++)
         {
             RectTransform rect = circles[i].GetComponent<RectTransform>();
             float y_pos = (points[i] / y_max) * graphConfig.graph_Height;
-            Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
-            rect.anchoredPosition = pos;
+
+            // Si está activo el escalado en x el nuevo vector deberá calcular la nueva posición en X también
+            if (scaling != Scaling.ONLY_Y)
+            {
+                float x_pos = ((float)i / circles.Count) * graphConfig.graph_Width;
+                Vector2 pos = new Vector2(x_pos, y_pos);
+                rect.anchoredPosition = pos;
+            }
+            else
+            {
+                Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+                rect.anchoredPosition = pos;
+            }
         }
+
+        // Escalado de los eventos del diseñador
         for (int i = 0; i < objective_circles.Count; i++)
         {
             RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
             float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
-            Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
-            rect.anchoredPosition = pos;
+
+            if (scaling != Scaling.ONLY_Y)
+            {
+                float x_pos = ((float)i / objective_circles.Count) * graphConfig.graph_Width;
+                Vector2 pos = new Vector2(x_pos, y_pos);
+                rect.anchoredPosition = pos;
+            }
+            else
+            {
+                Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+                rect.anchoredPosition = pos;
+            }
         }
 
+        // Cambio en el texto de los segmentos en Y
         for (int i = 0; i < label_Y_List.Length; i++)
         {
-            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString();
+            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F2"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
         }
+
+        if (scaling != Scaling.ONLY_Y)
+        {
+            // Reescalado de los puntos en X que se actualiza cuando se añaden
+            for (int i = 0; i < label_X_List.Count; i++)
+            {
+                label_X_List[i].text = (((float)circles.Count / (float)graphConfig.x_segments) * i).ToString("F2");
+            }
+        }
+        
     }
 
     // Inicializa la lista de puntos del Diseñador (Llamar desde la persistencia al crear)

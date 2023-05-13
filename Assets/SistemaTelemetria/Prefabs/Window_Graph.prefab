@@ -52,9 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d83b30ee680224cab8b4d32df564e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scaling: 0
   circle_sprite: {fileID: 21300000, guid: d61208f569d3dac498b1feab2843beab, type: 3}
   line_renderer: {fileID: 7446968175975427438}
-  objective_points: []
   objective_line_renderer: {fileID: 7446968175861290443}
   graph_container: {fileID: 7446968176650929545}
   points_container: {fileID: 7446968176872124924}
@@ -66,10 +66,6 @@ MonoBehaviour:
   label_template_Y: {fileID: 8789352861180054070, guid: bb272ea1ff4672845903dadc8854362a, type: 3}
   dash_template_X: {fileID: 6333979581059549825, guid: 909b3cf463a3ea54bb352679c0c7f67c, type: 3}
   dash_template_Y: {fileID: 1928189597557539403, guid: 7d7f678734513cb43a0a47c9076c8f43, type: 3}
-  graph_Height: 0
-  graph_Width: 0
-  x_segments: 10
-  y_segments: 8
   render_viewport: {fileID: 7446968176113501972}
 --- !u!1 &7446968175793239019
 GameObject:
