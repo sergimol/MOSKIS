@@ -13,6 +13,8 @@ using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEditor.PackageManager.UI;
 
+public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
+
 [Serializable]
 public struct GraphConfig
 {
@@ -33,6 +35,7 @@ public struct GraphConfig
     public int x_segments; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
     [HideInInspector]
     public int y_segments; // numero de separaciones que tiene el Eje Y
+    public GraphTypes graphType;
 }
 
 public class GraphPersistence : IPersistence
@@ -67,16 +70,8 @@ public class GraphPersistence : IPersistence
             GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
-            //graphs[i].transform.SetParent(canvasObject.transform, false);
             graphs[i].SetConfig(graphsConfig[i]);
-            //graphs[i].SetUpWindowGraph(canvasObject);
         }
-
-        //Pasar a una lista todos los valores de los keyframes de la grafica
-        /*for (int i = 0; i < graphsConfig.Count(); ++i)
-        {
-            graphs[i].setupWindowGraphConfig();
-        }*/
     }
 
     private void Update()
@@ -89,6 +84,10 @@ public class GraphPersistence : IPersistence
     public override void Send(TrackerEvent e)
     {
         //eventsBuff.Add(e);
+        for(int i = 0; i < graphs.Length; ++i)
+        {
+            graphs[i].ReceiveEvent(e);
+        }
     }
 
     public override void Flush()

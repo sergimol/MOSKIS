@@ -669,6 +669,10 @@ PrefabInstance:
       value: Juan
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].graphType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].x_segments
       value: 10
       objectReference: {fileID: 0}
@@ -895,6 +899,26 @@ PrefabInstance:
     - target: {fileID: 6558965507926781986, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: m_Name
       value: Tracker
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551398983740201068, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: eventConfig.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551398983740201068, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: eventConfig.Array.data[2].eventName
+      value: Space
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551398983740201068, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: eventConfig.Array.data[2].isTracked
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551398983740201068, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: eventConfig.Array.data[3].eventName
+      value: J
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551398983740201068, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: eventConfig.Array.data[3].isTracked
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8226352964209555625, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: m_RootOrder

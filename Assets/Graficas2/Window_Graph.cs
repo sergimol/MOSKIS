@@ -19,7 +19,7 @@ public class Window_Graph : MonoBehaviour
 
     // Puntos del diseñador
     //List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
-    public List<float> objective_points;
+    List<float> objective_points;
     [SerializeField]
     LineRenderer objective_line_renderer;
 
@@ -47,16 +47,18 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform dash_template_Y;
 
-    // Configuración del gráfico
-    public GraphConfig graphConfig;
-    // Dimensiones del Grafico
-    //public float graph_Height;
-    //public float graph_Width;
+    
 
     float x_size; // distancia entre puntos de X
     float y_size; // distancia entre puntos de Y
     float x_pos = 0;
 
+    // Configuración del gráfico
+    GraphConfig graphConfig;
+    /*ESTO ESTÁ DENTRO DE GRAPHCONFIG
+    // Dimensiones del Grafico
+    //public float graph_Height;
+    //public float graph_Width;
     //public int x_segments = 10; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
     //public int y_segments = 8; // numero de separaciones que tiene el Eje Y
     // |-------------*-
@@ -65,15 +67,16 @@ public class Window_Graph : MonoBehaviour
     // |-*-------------
     // +---------------
     // Los puntos se van ocultando por la izquierda <- <- <-
-
+    */
 
     float x_max; // Valor maximo que tiene el Eje X en cada momento
                  // Cada vez que se añade un punto se suma
     float y_max; // Valor maximo que puede alcanzar el Eje Y 
                  // Inicialmente lo determina el mayor valor de la grafica del diseñador
                  // Posteriormente se actualiza si aparecen valores mayores
-
-    int acostada = 1;
+    
+    // Contador para colocar el siguiente punto generado por eventos
+    float nextY = 0;
 
     // Listas de objetos generados
     TextMeshProUGUI[] label_Y_List;
@@ -123,15 +126,7 @@ public class Window_Graph : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AddPoint(Random.Range(0, 100));
-        }
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AddPoint(acostada);
-            acostada *= 2;
-        }
+        
     }
 
     void ShowGraph()
@@ -357,5 +352,34 @@ public class Window_Graph : MonoBehaviour
     public void SetObjectiveLine(List<float> o)
     {
         objective_points = new List<float>(o);
+    }
+
+    // Recibe un evento desde el sistema de persistencia y lo procesa si es necesario
+    public void ReceiveEvent(TrackerEvent e)
+    {
+        string eventType = e.GetEventType();
+        // Si el tipo del evento es igual que el del eje Y aumenta el contador que coloca el siguiente punto en Y
+        if (eventType == graphConfig.eventY)
+            nextY++;
+        // Si el tipo del evento es igual que el del eje X coloca el siguiente punto teniendo en cuenta el tipo de gráfica
+        else if (eventType == graphConfig.eventX)
+            ProcessXEvent();
+    }
+
+    private void ProcessXEvent()
+    {
+        switch (graphConfig.graphType)
+        {
+            case GraphTypes.AVERAGE:
+                AddPoint(nextY / (points.Count + 1));
+                break;
+            case GraphTypes.NOTACCUMULATED:
+                AddPoint(nextY);
+                nextY = 0;
+                break;
+            default:
+                AddPoint(nextY);
+                break;
+        }
     }
 }
