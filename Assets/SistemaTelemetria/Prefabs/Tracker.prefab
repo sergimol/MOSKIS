@@ -55,6 +55,7 @@ MonoBehaviour:
   timeBetweenPosts: 5
   filePers: 1
   serverPers: 1
+  graphPers: 1
 --- !u!114 &7551398983740201068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a27a00e2f9f3749bf0a6724799183d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphObject: {fileID: 5003983758475538796, guid: 34ff7c8fdddb2df4c8b4a76f20005354, type: 3}
+  graphObject: {fileID: 7446968175194295896, guid: 62bffe1a86a14bb488b2299888136db5, type: 3}
   graphsConfig:
   - name: Grafica 0
     eventX: Inicio

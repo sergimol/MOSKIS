@@ -44,7 +44,7 @@ public class GraphPersistence : IPersistence
     //La configuracion inicial de todos los graphs desde el editor
     public GraphConfig[] graphsConfig;
 
-    Graph[] graphs;
+    Window_Graph[] graphs;
 
     private void Start()
     {
@@ -64,18 +64,19 @@ public class GraphPersistence : IPersistence
         Array.Resize(ref graphs, graphsConfig.Count());
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
-            graphs[i] = Instantiate(graphObject).GetComponent<Graph>();
+            GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
+            graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
-            graphs[i].transform.SetParent(this.transform, false);
-            graphs[i].graphInfo = graphsConfig[i];
-            graphs[i].SetUpWindowGraph(canvasObject);
+            //graphs[i].transform.SetParent(canvasObject.transform, false);
+            graphs[i].SetConfig(graphsConfig[i]);
+            //graphs[i].SetUpWindowGraph(canvasObject);
         }
 
         //Pasar a una lista todos los valores de los keyframes de la grafica
-        for (int i = 0; i < graphsConfig.Count(); ++i)
+        /*for (int i = 0; i < graphsConfig.Count(); ++i)
         {
             graphs[i].setupWindowGraphConfig();
-        }
+        }*/
     }
 
     private void Update()
@@ -87,7 +88,7 @@ public class GraphPersistence : IPersistence
     }
     public override void Send(TrackerEvent e)
     {
-        eventsBuff.Add(e);
+        //eventsBuff.Add(e);
     }
 
     public override void Flush()
@@ -144,7 +145,7 @@ public class GraphPersistenceEditor : Editor
         }
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
-
+        
         // Guarda los cambios realizados en el editor
         serializedObject.ApplyModifiedProperties();
     }
