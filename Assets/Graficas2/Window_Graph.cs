@@ -125,6 +125,8 @@ public class Window_Graph : MonoBehaviour
         y_max = getMaxFromList();
 
         ShowGraph();
+
+
     }
 
     // Update is called once per frame
@@ -172,6 +174,26 @@ public class Window_Graph : MonoBehaviour
 
             label_Y_List[i] = labelY.GetComponent<TextMeshProUGUI>();
         }
+
+        // Leyenda //
+        RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
+        dash_obj.anchoredPosition = new Vector2(100, -16);
+        dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
+
+        RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
+        legend_obj.anchoredPosition = new Vector2(83, 1);
+        legend_obj.GetComponent<TextMeshProUGUI>().text = "Curva Diseñada";
+        legend_obj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+
+
+        RectTransform dash_player = Instantiate(dash_template_Y, lines_container.transform);
+        dash_player.anchoredPosition = new Vector2(300, -16);
+        dash_player.GetComponent<Image>().color = line_renderer.material.color;
+
+        RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
+        legend_player.anchoredPosition = new Vector2(82, 1);
+        legend_player.GetComponent<TextMeshProUGUI>().text = "Curva Obtenida";
+        legend_player.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
     }
 
