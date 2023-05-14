@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -35,11 +36,13 @@ public class ActGraphsInInspector : MonoBehaviour
                 //Actualización de todos los puntos de la gráfica
                 for (int j = 0; j < grpP.graphsConfig[i].x_segments; j++)
                 {
+                    if ((j - 1 >= 0 && anC.keys[j - 1].time == j) || (j + 1 < anC.keys.Length && anC.keys[j + 1].time == j))
+                        continue;
                     int y = j;
                     //Si ya hay un punto en el segmento j se coge su valor en y y se elimina
                     if (anC.length > j)
                     {
-                        y = (int)anC.keys[j].value;
+                        y = (int)Math.Round(anC.keys[j].value, 0);
                         anC.RemoveKey(j);
                     }
                     //Añadimos nuevo punto con las tangentes en Linear y el valor de y = anterior o = x
