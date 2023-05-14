@@ -18,11 +18,13 @@ public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
 [Serializable]
 public struct GraphConfig
 {
+    [HideInInspector]
     public string name;
     [HideInInspector]
     public string eventX;
     [HideInInspector]
     public string eventY;
+    [HideInInspector]
     public AnimationCurve myCurve;
     [HideInInspector]
     public GameObject window_graph;
@@ -35,6 +37,7 @@ public struct GraphConfig
     public int x_segments; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
     [HideInInspector]
     public int y_segments; // numero de separaciones que tiene el Eje Y
+    [HideInInspector]
     public GraphTypes graphType;
 }
 
@@ -52,7 +55,6 @@ public class GraphPersistence : IPersistence
     private void Start()
     {
         eventsBuff = new();
-        Keyframe k = (Keyframe)(graphsConfig[0].myCurve.keys.GetValue(0));
 
         // Crear un nuevo objeto Canvas
         GameObject canvasObject = new GameObject("Canvas");
@@ -102,33 +104,38 @@ public class GraphPersistence : IPersistence
 [CustomEditor(typeof(GraphPersistence))]
 public class GraphPersistenceEditor : Editor
 {
+    SerializedProperty grPers;
+
+    void OnEnable()
+    {
+        grPers = serializedObject.FindProperty("graphsConfig");
+    }
     public override void OnInspectorGUI()
     {
-        GraphPersistence graphPersistence = (GraphPersistence)target;
+        serializedObject.Update();
+        EditorGUILayout.PropertyField(grPers);
+        EditorUtility.SetDirty(target);
 
-        // Crea un campo para el arreglo graphs en GraphPersistence
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("graphsConfig"), true);
+        GraphPersistence graphPersistence = (GraphPersistence)target;      
+
+        //Obtén los nombres de los eventos del script TrackerConfig
+        TrackerConfig trackerConfig = graphPersistence.gameObject.GetComponent<TrackerConfig>();
+        List<string> eventNames = new List<string>();
+        foreach (TrackerConfig.EventConfig config in trackerConfig.eventConfig)
+        {
+            eventNames.Add(config.eventName);
+        }
 
         // Crea un menú dropdown para cada elemento de graphs
         for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
+            graphPersistence.graphsConfig[i].name = EditorGUILayout.TextField("GraphName", graphPersistence.graphsConfig[i].name);
+            EditorGUILayout.CurveField(graphPersistence.graphsConfig[i].myCurve);
+                        
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(graphPersistence.graphsConfig[i].name, EditorStyles.boldLabel);
+            graphPersistence.graphsConfig[i].graphType = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", graphPersistence.graphsConfig[i].graphType);
 
-            ////Editado
-            //graphPersistence.graphs[i].name = EditorGUILayout.TextField("Name", graphPersistence.graphs[i].name);
-            //graphPersistence.graphs[i].eventX = EditorGUILayout.TextField("Event X", graphPersistence.graphs[i].eventX);
-            //graphPersistence.graphs[i].eventY = EditorGUILayout.TextField("Event Y", graphPersistence.graphs[i].eventY);
-
-            //Obtén los nombres de los eventos del script TrackerConfig
-            TrackerConfig trackerConfig = FindObjectOfType<TrackerConfig>();
-            List<string> eventNames = new List<string>();
-            foreach (TrackerConfig.EventConfig config in trackerConfig.eventConfig)
-            {
-                eventNames.Add(config.eventName);
-            }
-
-            // Crea un menú dropdown con los nombres de los eventos
+            // Crea un menú popup con los nombres de los eventos
             int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX);
             selectedEventIndex = EditorGUILayout.Popup("Select Event X", selectedEventIndex, eventNames.ToArray());
             if(selectedEventIndex != -1)
@@ -138,15 +145,18 @@ public class GraphPersistenceEditor : Editor
             selectedEventIndex = EditorGUILayout.Popup("Select Event Y", selectedEventIndex, eventNames.ToArray());
             if (selectedEventIndex != -1)
                 graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
+            
             //El resto de configuracion
-            graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("graph_Height", graphPersistence.graphsConfig[i].graph_Height);
-            graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("graph_Width", graphPersistence.graphsConfig[i].graph_Width);
-            graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("x_segments", graphPersistence.graphsConfig[i].x_segments);
-            graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("y_segments", graphPersistence.graphsConfig[i].y_segments);
+            graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("Graph_Height", graphPersistence.graphsConfig[i].graph_Height);
+            graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("Graph_Width", graphPersistence.graphsConfig[i].graph_Width);
+            graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
+            graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("Y_segments", graphPersistence.graphsConfig[i].y_segments);
+
+            EditorGUILayout.Space(20);
         }
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
-        
+
         // Guarda los cambios realizados en el editor
         serializedObject.ApplyModifiedProperties();
     }

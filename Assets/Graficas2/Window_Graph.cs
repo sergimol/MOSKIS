@@ -310,7 +310,6 @@ public class Window_Graph : MonoBehaviour
 
     private void CheckMove(Vector2 newPoint, Vector2 newPoint2)
     {
-        Debug.LogError(scaling);
         if (scaling != Scaling.ONLY_Y)
         {
             if (newPoint.y > y_max)

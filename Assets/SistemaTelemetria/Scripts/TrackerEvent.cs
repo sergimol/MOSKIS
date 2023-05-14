@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
-public class TrackerEvent : MonoBehaviour
+public class TrackerEvent
 {
     //Variables comunes
     protected string type; 
