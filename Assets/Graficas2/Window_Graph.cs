@@ -100,10 +100,10 @@ public class Window_Graph : MonoBehaviour
         graphConfig = g;
         label_Y_List = new TextMeshProUGUI[graphConfig.y_segments + 1];
 
-        // Altura del grid
-        graphConfig.graph_Height = graph_container.sizeDelta.y;
-        // Ancho del grid
-        graphConfig.graph_Width = graph_container.sizeDelta.x;
+        // Altura del grid, altura base 5
+        graphConfig.graph_Height *= graph_container.sizeDelta.y / 5;
+        // Ancho del grid, anchuira base 5
+        graphConfig.graph_Width *= graph_container.sizeDelta.x / 5;
 
         graphConfig.x_segments--;
 
@@ -177,7 +177,7 @@ public class Window_Graph : MonoBehaviour
 
         // Leyenda //
         RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
-        dash_obj.anchoredPosition = new Vector2(100, -16);
+        dash_obj.anchoredPosition = new Vector2(graphConfig.graph_Width/6, -16);
         dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
 
         RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
@@ -187,7 +187,7 @@ public class Window_Graph : MonoBehaviour
 
 
         RectTransform dash_player = Instantiate(dash_template_Y, lines_container.transform);
-        dash_player.anchoredPosition = new Vector2(300, -16);
+        dash_player.anchoredPosition = new Vector2((graphConfig.graph_Width/3), -16);
         dash_player.GetComponent<Image>().color = line_renderer.material.color;
 
         RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
@@ -310,7 +310,6 @@ public class Window_Graph : MonoBehaviour
 
     private void CheckMove(Vector2 newPoint, Vector2 newPoint2)
     {
-        Debug.LogError(scaling);
         if (scaling != Scaling.ONLY_Y)
         {
             if (newPoint.y > y_max)
