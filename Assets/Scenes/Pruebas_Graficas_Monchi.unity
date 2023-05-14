@@ -660,33 +660,109 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2534678550416738100, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4175451787749784533, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].name
-      value: Juan
-      objectReference: {fileID: 0}
-    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].graphType
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].name
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].name
+      value: khjghka
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].eventX
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].eventY
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].eventX
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].eventY
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].graphType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].graphType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].x_segments
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].y_segments
-      value: 6
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].x_segments
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].y_segments
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].graph_Width
-      value: 250
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].graph_Width
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].graph_Height
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].graph_Height
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_PreInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_PostInfinity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_PostInfinity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.size
-      value: 10
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].time
@@ -709,35 +785,107 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[1].value
-      value: 67
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[1].time
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].value
-      value: 66
-      objectReference: {fileID: 0}
-    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[4].value
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[2].time
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].value
-      value: 65
-      objectReference: {fileID: 0}
-    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].value
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[3].time
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].value
-      value: 65
-      objectReference: {fileID: 0}
-    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
-      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[8].value
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[4].time
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[5].time
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[6].time
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[7].time
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[8].time
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[9].time
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[2].value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].value
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[4].value
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].value
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].value
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].value
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[8].value
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[9].value
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[1].value
+      value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[3].value
+      value: 66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[4].value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[5].value
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[6].value
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[7].value
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[8].value
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[9].value
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
@@ -746,38 +894,74 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[1].inSlope
-      value: 67
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[2].inSlope
-      value: -67
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].inSlope
-      value: 66
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[4].inSlope
-      value: -64
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].inSlope
-      value: 63
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].inSlope
-      value: -62
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].inSlope
-      value: 62
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[8].inSlope
-      value: -61
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[9].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[1].inSlope
+      value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[2].inSlope
+      value: -67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[3].inSlope
+      value: 66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[4].inSlope
+      value: -64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[5].inSlope
+      value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[6].inSlope
+      value: -62
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[7].inSlope
+      value: 62
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[8].inSlope
+      value: -61
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[9].inSlope
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
@@ -786,7 +970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[0].outSlope
-      value: 67
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[1].inWeight
@@ -794,7 +978,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[1].outSlope
-      value: -67
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[2].inWeight
@@ -802,7 +986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[2].outSlope
-      value: 66
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].inWeight
@@ -810,31 +994,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].outSlope
-      value: -64
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[4].outSlope
-      value: 63
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].outSlope
-      value: -62
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].outSlope
-      value: 62
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].outSlope
-      value: -61
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[8].outSlope
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[9].outSlope
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[0].outSlope
+      value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[1].outSlope
+      value: -67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[2].outSlope
+      value: 66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[3].outSlope
+      value: -64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[4].outSlope
+      value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[5].outSlope
+      value: -62
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[6].outSlope
+      value: 62
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[7].outSlope
+      value: -61
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[8].outSlope
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[0].outWeight
@@ -851,6 +1071,10 @@ PrefabInstance:
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].outWeight
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[0].tangentMode
+      value: 69
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].tangentMode
@@ -870,6 +1094,46 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[9].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[0].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[1].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[2].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[3].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[4].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[5].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[6].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[7].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[8].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].myCurve.m_Curve.Array.data[9].tangentMode
       value: 69
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}

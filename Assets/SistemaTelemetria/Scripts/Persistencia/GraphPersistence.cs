@@ -131,11 +131,13 @@ public class GraphPersistenceEditor : Editor
             // Crea un menú dropdown con los nombres de los eventos
             int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX);
             selectedEventIndex = EditorGUILayout.Popup("Select Event X", selectedEventIndex, eventNames.ToArray());
-            graphPersistence.graphsConfig[i].eventX = eventNames[selectedEventIndex];
+            if(selectedEventIndex != -1)
+                graphPersistence.graphsConfig[i].eventX = eventNames[selectedEventIndex];
 
             selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventY);
             selectedEventIndex = EditorGUILayout.Popup("Select Event Y", selectedEventIndex, eventNames.ToArray());
-            graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
+            if (selectedEventIndex != -1)
+                graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
             //El resto de configuracion
             graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("graph_Height", graphPersistence.graphsConfig[i].graph_Height);
             graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("graph_Width", graphPersistence.graphsConfig[i].graph_Width);

@@ -17,22 +17,41 @@ public class ActGraphsInInspector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int i = 0; i<grpP.graphsConfig.Length; i++)
+        //Recorrido de todas las gráficas del editor
+        for(int i = 0; i<grpP.graphsConfig.Length; i++)     
         {
-            for(int j=0; j< grpP.graphsConfig[i].x_segments; j++)
+            AnimationCurve anC = grpP.graphsConfig[i].myCurve;
+
+            //Si no hay ningún segmento en x se añade un punto inicial a la gráfica
+            if (grpP.graphsConfig[i].x_segments == 0)
             {
-                AnimationCurve anC = grpP.graphsConfig[i].myCurve;
-                int y = j;
-                if (anC.length > j)
-                {
-                    y = (int)anC.keys[j].value;
-                    anC.RemoveKey(j);
-                }
-                Keyframe k = new Keyframe(j, y);
+                Keyframe k = new Keyframe(0, 0);
                 anC.AddKey(k);
-                AnimationUtility.SetKeyRightTangentMode(anC, j, TangentMode.Linear);
-                AnimationUtility.SetKeyLeftTangentMode(anC, j, TangentMode.Linear);
+                AnimationUtility.SetKeyRightTangentMode(anC, 0, TangentMode.Linear);
+                AnimationUtility.SetKeyLeftTangentMode(anC, 0, TangentMode.Linear);
             }
+            else
+            {
+                //Actualización de todos los puntos de la gráfica
+                for (int j = 0; j < grpP.graphsConfig[i].x_segments; j++)
+                {
+                    int y = j;
+                    //Si ya hay un punto en el segmento j se coge su valor en y y se elimina
+                    if (anC.length > j)
+                    {
+                        y = (int)anC.keys[j].value;
+                        anC.RemoveKey(j);
+                    }
+                    //Añadimos nuevo punto con las tangentes en Linear y el valor de y = anterior o = x
+                    Keyframe k = new Keyframe(j, y);
+                    anC.AddKey(k);
+                    AnimationUtility.SetKeyRightTangentMode(anC, j, TangentMode.Linear);
+                    AnimationUtility.SetKeyLeftTangentMode(anC, j, TangentMode.Linear);
+                }
+            }
+
+            anC.preWrapMode = WrapMode.Clamp;
+            anC.postWrapMode = WrapMode.Clamp;
         }
     }
 }
