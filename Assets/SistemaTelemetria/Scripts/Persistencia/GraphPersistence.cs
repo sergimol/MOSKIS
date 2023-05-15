@@ -86,7 +86,7 @@ public class GraphPersistence : IPersistence
     public override void Send(TrackerEvent e)
     {
         //eventsBuff.Add(e);
-        for(int i = 0; i < graphs.Length; ++i)
+        for (int i = 0; i < graphs.Length; ++i)
         {
             graphs[i].ReceiveEvent(e);
         }
@@ -114,9 +114,8 @@ public class GraphPersistenceEditor : Editor
     {
         serializedObject.Update();
         EditorGUILayout.PropertyField(grPers);
-        EditorUtility.SetDirty(target);
 
-        GraphPersistence graphPersistence = (GraphPersistence)target;      
+        GraphPersistence graphPersistence = (GraphPersistence)target;
 
         //Obtén los nombres de los eventos del script TrackerConfig
         TrackerConfig trackerConfig = graphPersistence.gameObject.GetComponent<TrackerConfig>();
@@ -129,28 +128,75 @@ public class GraphPersistenceEditor : Editor
         // Crea un menú dropdown para cada elemento de graphs
         for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
-            graphPersistence.graphsConfig[i].name = EditorGUILayout.TextField("GraphName", graphPersistence.graphsConfig[i].name);
-            EditorGUILayout.CurveField(graphPersistence.graphsConfig[i].myCurve);
-                        
-            EditorGUILayout.Space();
-            graphPersistence.graphsConfig[i].graphType = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", graphPersistence.graphsConfig[i].graphType);
+            string name = EditorGUILayout.TextField("GraphName", graphPersistence.graphsConfig[i].name);
+            if (graphPersistence.graphsConfig[i].name != name)
+            {
+                graphPersistence.graphsConfig[i].name = name;
+                EditorUtility.SetDirty(target);
+            }
+
+            AnimationCurve an = EditorGUILayout.CurveField(graphPersistence.graphsConfig[i].myCurve);            
+            if(!graphPersistence.graphsConfig[i].myCurve.keys.SequenceEqual(an.keys))
+            {
+                graphPersistence.graphsConfig[i].myCurve = an;
+                EditorUtility.SetDirty(target);
+            }
+            EditorGUILayout.Space(5);
+
+            GraphTypes gT = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", graphPersistence.graphsConfig[i].graphType);
+            if (graphPersistence.graphsConfig[i].graphType != gT)
+            {
+                graphPersistence.graphsConfig[i].graphType = gT;
+                EditorUtility.SetDirty(target);
+            }
 
             // Crea un menú popup con los nombres de los eventos
             int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX);
             selectedEventIndex = EditorGUILayout.Popup("Select Event X", selectedEventIndex, eventNames.ToArray());
-            if(selectedEventIndex != -1)
+            if (selectedEventIndex != -1 && graphPersistence.graphsConfig[i].eventX != eventNames[selectedEventIndex])
+            {
                 graphPersistence.graphsConfig[i].eventX = eventNames[selectedEventIndex];
+                EditorUtility.SetDirty(target);
+            }
 
             selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventY);
             selectedEventIndex = EditorGUILayout.Popup("Select Event Y", selectedEventIndex, eventNames.ToArray());
-            if (selectedEventIndex != -1)
+            if (selectedEventIndex != -1 && graphPersistence.graphsConfig[i].eventY != eventNames[selectedEventIndex])
+            {
                 graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
-            
+                EditorUtility.SetDirty(target);
+            }
+
             //El resto de configuracion
-            graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("Graph_Height", graphPersistence.graphsConfig[i].graph_Height);
-            graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("Graph_Width", graphPersistence.graphsConfig[i].graph_Width);
-            graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
-            graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("Y_segments", graphPersistence.graphsConfig[i].y_segments);
+            float aux;
+            aux = EditorGUILayout.FloatField("Graph_Height", graphPersistence.graphsConfig[i].graph_Height);
+            if (graphPersistence.graphsConfig[i].graph_Height != aux)
+            {
+                graphPersistence.graphsConfig[i].graph_Height = aux;
+                EditorUtility.SetDirty(target);
+            }
+
+            aux = EditorGUILayout.FloatField("Graph_Width", graphPersistence.graphsConfig[i].graph_Width);
+            if (graphPersistence.graphsConfig[i].graph_Width != aux)
+            {
+                graphPersistence.graphsConfig[i].graph_Width = aux;
+                EditorUtility.SetDirty(target);
+            }
+
+            int intAux;
+            intAux = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
+            if (graphPersistence.graphsConfig[i].x_segments != intAux)
+            {
+                graphPersistence.graphsConfig[i].x_segments = intAux;
+                EditorUtility.SetDirty(target);
+            }
+
+            intAux = EditorGUILayout.IntField("Y_segments", graphPersistence.graphsConfig[i].y_segments);
+            if (graphPersistence.graphsConfig[i].y_segments != intAux)
+            {
+                graphPersistence.graphsConfig[i].y_segments = intAux;
+                EditorUtility.SetDirty(target);
+            }
 
             EditorGUILayout.Space(20);
         }
