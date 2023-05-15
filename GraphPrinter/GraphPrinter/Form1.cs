@@ -64,11 +64,11 @@ namespace GraphPrinter
                     graph.ChartAreas[0].AxisY.Maximum = Math.Max(graph.ChartAreas[0].AxisY.Maximum, maxYCandidate);
                 }
                 showingGraph = true;
+                SaveButton.Visible = true;
             }
             catch (Exception ex)
             { 
                 MessageBox.Show(ex.Message);
-                showingGraph = false;
             }
         }
 
@@ -100,6 +100,7 @@ namespace GraphPrinter
             graph.Series.FindByName("Obtenida").Points.Clear();
             graph.Series.FindByName("Diseñada").Points.Clear();
             showingGraph = false;
+            SaveButton.Visible = false;
         }
     }
 }

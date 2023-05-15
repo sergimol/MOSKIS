@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title7 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.Title title8 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title15 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Title title16 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.SaveButton = new System.Windows.Forms.Button();
             this.OpenButton = new System.Windows.Forms.Button();
@@ -44,52 +44,58 @@
             // 
             // graph
             // 
-            chartArea4.Name = "ChartArea1";
-            this.graph.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.graph.Legends.Add(legend4);
+            this.graph.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea8.Name = "ChartArea1";
+            this.graph.ChartAreas.Add(chartArea8);
+            legend8.Name = "Legend1";
+            this.graph.Legends.Add(legend8);
             this.graph.Location = new System.Drawing.Point(2, 3);
             this.graph.Name = "graph";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Color = System.Drawing.Color.Red;
-            series7.Legend = "Legend1";
-            series7.Name = "Diseñada";
-            series7.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            series7.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Color = System.Drawing.Color.Lime;
-            series8.Legend = "Legend1";
-            series8.Name = "Obtenida";
-            series8.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            series8.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
-            this.graph.Series.Add(series7);
-            this.graph.Series.Add(series8);
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series15.Color = System.Drawing.Color.Red;
+            series15.Legend = "Legend1";
+            series15.Name = "Diseñada";
+            series15.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
+            series15.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
+            series16.ChartArea = "ChartArea1";
+            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series16.Color = System.Drawing.Color.Lime;
+            series16.Legend = "Legend1";
+            series16.Name = "Obtenida";
+            series16.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
+            series16.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
+            this.graph.Series.Add(series15);
+            this.graph.Series.Add(series16);
             this.graph.Size = new System.Drawing.Size(786, 300);
             this.graph.TabIndex = 0;
             this.graph.Text = "chart1";
-            title7.Alignment = System.Drawing.ContentAlignment.BottomCenter;
-            title7.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            title7.Name = "EventX";
-            title8.Alignment = System.Drawing.ContentAlignment.TopLeft;
-            title8.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
-            title8.Name = "EventY";
-            this.graph.Titles.Add(title7);
-            this.graph.Titles.Add(title8);
+            title15.Alignment = System.Drawing.ContentAlignment.BottomCenter;
+            title15.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            title15.Name = "EventX";
+            title16.Alignment = System.Drawing.ContentAlignment.TopLeft;
+            title16.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
+            title16.Name = "EventY";
+            this.graph.Titles.Add(title15);
+            this.graph.Titles.Add(title16);
             // 
             // SaveButton
             // 
+            this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SaveButton.Location = new System.Drawing.Point(29, 384);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(75, 23);
             this.SaveButton.TabIndex = 1;
             this.SaveButton.Text = "Guardar";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Visible = false;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // OpenButton
             // 
+            this.OpenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OpenButton.Location = new System.Drawing.Point(29, 355);
             this.OpenButton.Name = "OpenButton";
             this.OpenButton.Size = new System.Drawing.Size(75, 23);
