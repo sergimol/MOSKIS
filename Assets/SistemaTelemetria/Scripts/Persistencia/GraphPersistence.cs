@@ -60,9 +60,18 @@ public class GraphPersistence : IPersistence
 
     Window_Graph[] graphs;
 
+    private string baseSaveRoute = "Trazas\\Graphs\\";
+    private Dictionary<string, StreamWriter> graphWriters;
+
     private void Start()
     {
         eventsBuff = new();
+        graphWriters = new Dictionary<string, StreamWriter>();
+
+        // Crear la carpeta donde se guuardarán los archivos que contienen los datos con los puntos de la gráfica
+        string id = Tracker.instance.getSessionId().ToString();
+        string fullRoute = baseSaveRoute + id + "\\";
+        Directory.CreateDirectory(fullRoute);
 
         // Crear un nuevo objeto Canvas
         GameObject canvasObject = new GameObject("Canvas");
@@ -82,22 +91,36 @@ public class GraphPersistence : IPersistence
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
             graphs[i].SetConfig(graphsConfig[i]);
+            // Crear el archivo en el que se guardarán los puntos en formato de texto
+            graphWriters.Add(graphsConfig[i].name, new StreamWriter(fullRoute + graphsConfig[i].name + ".csv"));
+            graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
         }
     }
 
     private void Update()
     {
     }
+
     private void OnDestroy()
     {
-
+        for(int i = 0; i < graphs.Length; ++i)
+        {
+            graphWriters[graphs[i].name].Close();
+        }
     }
     public override void Send(TrackerEvent e)
     {
         //eventsBuff.Add(e);
         for (int i = 0; i < graphs.Length; ++i)
         {
-            graphs[i].ReceiveEvent(e);
+            // Comprueba si la gráfica tiene el evento y si debe mostrar un nuevo punto
+            if (graphs[i].ReceiveEvent(e))
+            {
+                // Si muestra un nuevo punto lo escribe en archivo para guardarlo
+                Vector2 pos = graphs[i].getLatestPoint();
+                // Formato: X (de los dos puntos), Y (del punto de la gráfica del jugador), Y (del punto de la gráfica del diseñador)
+                graphWriters[graphs[i].name].WriteLine(pos.x + "," + pos.y + "," + graphs[i].getLatestObjectivePoint());
+            }
         }
     }
 
@@ -107,7 +130,6 @@ public class GraphPersistence : IPersistence
         //eventsBuff.Clear();
         //Write(events);
     }
-
 }
 
 [CustomEditor(typeof(GraphPersistence))]
