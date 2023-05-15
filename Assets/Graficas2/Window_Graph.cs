@@ -6,12 +6,8 @@ using UnityEngine.UI;
 using System.Linq;
 using static UnityEditor.PlayerSettings;
 
-public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
-
 public class Window_Graph : MonoBehaviour
 {
-    public Scaling scaling;
-
     [SerializeField]
     Sprite circle_sprite;
     float circle_scale = 5;
@@ -139,6 +135,9 @@ public class Window_Graph : MonoBehaviour
     {
         x_size = graphConfig.graph_Width / graphConfig.x_segments;
         y_size = graphConfig.graph_Height / graphConfig.y_segments;
+
+        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
+        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
 
         float x = 0;
         float y = x;
@@ -310,7 +309,7 @@ public class Window_Graph : MonoBehaviour
 
     private void CheckMove(Vector2 newPoint, Vector2 newPoint2)
     {
-        if (scaling != Scaling.ONLY_Y)
+        if (graphConfig.scaling != Scaling.ONLY_Y)
         {
             if (newPoint.y > y_max)
                 y_max = newPoint.y;
@@ -377,7 +376,7 @@ public class Window_Graph : MonoBehaviour
 
             // Si está activo el escalado en x el nuevo vector deberá calcular la nueva posición en X también
             // Si está activo el escalado con offset, se espera hasta llegar a los segmentos de X
-            if (scaling == Scaling.X_SCALING_START || (scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+            if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
                 float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
                 Vector2 pos = new Vector2(x_pos, y_pos);
@@ -396,7 +395,7 @@ public class Window_Graph : MonoBehaviour
             RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
             float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
 
-            if (scaling == Scaling.X_SCALING_START || (scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+            if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
                 float x_pos = ((float)i / (objective_circles.Count - 1)) * graphConfig.graph_Width;
                 Vector2 pos = new Vector2(x_pos, y_pos);
@@ -415,7 +414,7 @@ public class Window_Graph : MonoBehaviour
             label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F2"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
         }
 
-        if (scaling == Scaling.X_SCALING_START || (scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+        if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
         {
             // Reescalado de los puntos en X que se actualiza cuando se añaden
             for (int i = 0; i < label_X_List.Count; i++)

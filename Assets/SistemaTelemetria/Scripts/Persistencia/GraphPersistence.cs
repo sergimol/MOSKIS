@@ -14,6 +14,7 @@ using UnityEngine.UI;
 using UnityEditor.PackageManager.UI;
 
 public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
+public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
 
 [Serializable]
 public struct GraphConfig
@@ -33,10 +34,17 @@ public struct GraphConfig
     public float graph_Height;
     [HideInInspector]
     public float graph_Width;
+    //Posición en X e Y
+    [HideInInspector]
+    public int graph_X;
+    [HideInInspector]
+    public int graph_Y;
     [HideInInspector]
     public int x_segments; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
     [HideInInspector]
     public int y_segments; // numero de separaciones que tiene el Eje Y
+    [HideInInspector]
+    public Scaling scaling;
     [HideInInspector]
     public GraphTypes graphType;
 }
@@ -70,6 +78,7 @@ public class GraphPersistence : IPersistence
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
             GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
+            aux.GetComponent<RectTransform>().offsetMax = new Vector2(graphsConfig[i].graph_X, graphsConfig[i].graph_Y);
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
             graphs[i].SetConfig(graphsConfig[i]);
@@ -150,6 +159,13 @@ public class GraphPersistenceEditor : Editor
                 EditorUtility.SetDirty(target);
             }
 
+            Scaling sc = (Scaling)EditorGUILayout.EnumPopup("Scaling", graphPersistence.graphsConfig[i].scaling);
+            if (graphPersistence.graphsConfig[i].scaling != sc)
+            {
+                graphPersistence.graphsConfig[i].scaling = sc;
+                EditorUtility.SetDirty(target);
+            }
+
             // Crea un menú popup con los nombres de los eventos
             int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX);
             selectedEventIndex = EditorGUILayout.Popup("Select Event X", selectedEventIndex, eventNames.ToArray());
@@ -184,6 +200,20 @@ public class GraphPersistenceEditor : Editor
             }
 
             int intAux;
+            intAux = EditorGUILayout.IntField("X_Pos", graphPersistence.graphsConfig[i].graph_X);
+            if (graphPersistence.graphsConfig[i].graph_X != intAux)
+            {
+                graphPersistence.graphsConfig[i].graph_X = intAux;
+                EditorUtility.SetDirty(target);
+            }
+
+            intAux = EditorGUILayout.IntField("Y_Pos", graphPersistence.graphsConfig[i].graph_Y);
+            if (graphPersistence.graphsConfig[i].graph_Y != intAux)
+            {
+                graphPersistence.graphsConfig[i].graph_Y = intAux;
+                EditorUtility.SetDirty(target);
+            }
+
             intAux = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
             if (graphPersistence.graphsConfig[i].x_segments != intAux)
             {
