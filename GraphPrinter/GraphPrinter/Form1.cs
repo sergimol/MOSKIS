@@ -75,7 +75,7 @@ namespace GraphPrinter
             if (showingGraph)
             {
                 string imageName = fileName.Split('.')[0];
-                graph.SaveImage(fileName + ".png", ChartImageFormat.Png);
+                graph.SaveImage(imageName + ".png", ChartImageFormat.Png);
             }
         }
     }
