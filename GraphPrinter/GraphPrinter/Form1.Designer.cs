@@ -112,7 +112,6 @@
             this.Controls.Add(this.graph);
             this.Name = "GraphPrinter";
             this.Text = "GraphPrinter";
-            this.Load += new System.EventHandler(this.GraphPrinter_Load);
             ((System.ComponentModel.ISupportInitialize)(this.graph)).EndInit();
             this.ResumeLayout(false);
 
