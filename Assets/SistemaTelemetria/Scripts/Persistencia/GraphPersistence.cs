@@ -141,9 +141,15 @@ public class GraphPersistenceEditor : Editor
     {
         grPers = serializedObject.FindProperty("graphsConfig");
     }
+
+    void OnValidate()
+    {
+        
+    }
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+        //EditorUtility.SetDirty(target);
         EditorGUILayout.PropertyField(grPers);
 
         GraphPersistence graphPersistence = (GraphPersistence)target;
@@ -156,105 +162,47 @@ public class GraphPersistenceEditor : Editor
             eventNames.Add(config.eventName);
         }
 
+        EditorGUI.BeginChangeCheck();
         // Crea un menú dropdown para cada elemento de graphs
         for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
-            string name = EditorGUILayout.TextField("GraphName", graphPersistence.graphsConfig[i].name);
-            if (graphPersistence.graphsConfig[i].name != name)
-            {
-                graphPersistence.graphsConfig[i].name = name;
-                EditorUtility.SetDirty(target);
-            }
+            graphPersistence.graphsConfig[i].name = EditorGUILayout.TextField("GraphName", graphPersistence.graphsConfig[i].name);
 
-            AnimationCurve an = EditorGUILayout.CurveField(graphPersistence.graphsConfig[i].myCurve);            
-            if(!graphPersistence.graphsConfig[i].myCurve.keys.SequenceEqual(an.keys))
-            {
-                graphPersistence.graphsConfig[i].myCurve = an;
-                EditorUtility.SetDirty(target);
-            }
+            graphPersistence.graphsConfig[i].myCurve = EditorGUILayout.CurveField(graphPersistence.graphsConfig[i].myCurve);
             EditorGUILayout.Space(5);
-
-            GraphTypes gT = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", graphPersistence.graphsConfig[i].graphType);
-            if (graphPersistence.graphsConfig[i].graphType != gT)
-            {
-                graphPersistence.graphsConfig[i].graphType = gT;
-                EditorUtility.SetDirty(target);
-            }
-
-            Scaling sc = (Scaling)EditorGUILayout.EnumPopup("Scaling", graphPersistence.graphsConfig[i].scaling);
-            if (graphPersistence.graphsConfig[i].scaling != sc)
-            {
-                graphPersistence.graphsConfig[i].scaling = sc;
-                EditorUtility.SetDirty(target);
-            }
+            
+            //Variables de escala
+            graphPersistence.graphsConfig[i].graphType = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", graphPersistence.graphsConfig[i].graphType);
+            graphPersistence.graphsConfig[i].scaling = (Scaling)EditorGUILayout.EnumPopup("Scaling", graphPersistence.graphsConfig[i].scaling);
 
             // Crea un menú popup con los nombres de los eventos
-            int selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX);
-            selectedEventIndex = EditorGUILayout.Popup("Select Event X", selectedEventIndex, eventNames.ToArray());
+            int selectedEventIndex;
+            selectedEventIndex = EditorGUILayout.Popup("Select Event X", eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX), eventNames.ToArray());
             if (selectedEventIndex != -1 && graphPersistence.graphsConfig[i].eventX != eventNames[selectedEventIndex])
-            {
                 graphPersistence.graphsConfig[i].eventX = eventNames[selectedEventIndex];
-                EditorUtility.SetDirty(target);
-            }
-
-            selectedEventIndex = eventNames.IndexOf(graphPersistence.graphsConfig[i].eventY);
-            selectedEventIndex = EditorGUILayout.Popup("Select Event Y", selectedEventIndex, eventNames.ToArray());
+            
+            selectedEventIndex = EditorGUILayout.Popup("Select Event Y", eventNames.IndexOf(graphPersistence.graphsConfig[i].eventY), eventNames.ToArray());
             if (selectedEventIndex != -1 && graphPersistence.graphsConfig[i].eventY != eventNames[selectedEventIndex])
-            {
                 graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
-                EditorUtility.SetDirty(target);
-            }
 
             //El resto de configuracion
-            float aux;
-            aux = EditorGUILayout.FloatField("Graph_Height", graphPersistence.graphsConfig[i].graph_Height);
-            if (graphPersistence.graphsConfig[i].graph_Height != aux)
-            {
-                graphPersistence.graphsConfig[i].graph_Height = aux;
-                EditorUtility.SetDirty(target);
-            }
+            graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("Graph_Height", graphPersistence.graphsConfig[i].graph_Height);
+            graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("Graph_Width", graphPersistence.graphsConfig[i].graph_Width);
 
-            aux = EditorGUILayout.FloatField("Graph_Width", graphPersistence.graphsConfig[i].graph_Width);
-            if (graphPersistence.graphsConfig[i].graph_Width != aux)
-            {
-                graphPersistence.graphsConfig[i].graph_Width = aux;
-                EditorUtility.SetDirty(target);
-            }
+            graphPersistence.graphsConfig[i].graph_X = EditorGUILayout.IntField("X_Pos", graphPersistence.graphsConfig[i].graph_X);
+            graphPersistence.graphsConfig[i].graph_Y = EditorGUILayout.IntField("Y_Pos", graphPersistence.graphsConfig[i].graph_Y);
 
-            int intAux;
-            intAux = EditorGUILayout.IntField("X_Pos", graphPersistence.graphsConfig[i].graph_X);
-            if (graphPersistence.graphsConfig[i].graph_X != intAux)
-            {
-                graphPersistence.graphsConfig[i].graph_X = intAux;
-                EditorUtility.SetDirty(target);
-            }
-
-            intAux = EditorGUILayout.IntField("Y_Pos", graphPersistence.graphsConfig[i].graph_Y);
-            if (graphPersistence.graphsConfig[i].graph_Y != intAux)
-            {
-                graphPersistence.graphsConfig[i].graph_Y = intAux;
-                EditorUtility.SetDirty(target);
-            }
-
-            intAux = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
-            if (graphPersistence.graphsConfig[i].x_segments != intAux)
-            {
-                graphPersistence.graphsConfig[i].x_segments = intAux;
-                EditorUtility.SetDirty(target);
-            }
-
-            intAux = EditorGUILayout.IntField("Y_segments", graphPersistence.graphsConfig[i].y_segments);
-            if (graphPersistence.graphsConfig[i].y_segments != intAux)
-            {
-                graphPersistence.graphsConfig[i].y_segments = intAux;
-                EditorUtility.SetDirty(target);
-            }
+            graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
+            graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("Y_segments", graphPersistence.graphsConfig[i].y_segments);
 
             EditorGUILayout.Space(20);
         }
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
 
+        if (EditorGUI.EndChangeCheck())        
+            EditorUtility.SetDirty(target);
+        
         // Guarda los cambios realizados en el editor
         serializedObject.ApplyModifiedProperties();
     }
