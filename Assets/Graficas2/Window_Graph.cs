@@ -432,8 +432,8 @@ public class Window_Graph : MonoBehaviour
         objective_points = new List<float>(o);
     }
 
-    // Recibe un evento desde el sistema de persistencia y lo procesa si es necesario
-    public void ReceiveEvent(TrackerEvent e)
+    // Recibe un evento desde el sistema de persistencia y lo procesa si es necesario. Devuelve true solo si escribe un nuevo punto en la gráfica
+    public bool ReceiveEvent(TrackerEvent e)
     {
         string eventType = e.GetEventType();
         // Si el tipo del evento es igual que el del eje Y aumenta el contador que coloca el siguiente punto en Y
@@ -441,7 +441,11 @@ public class Window_Graph : MonoBehaviour
             nextY++;
         // Si el tipo del evento es igual que el del eje X coloca el siguiente punto teniendo en cuenta el tipo de gráfica
         else if (eventType == graphConfig.eventX)
+        {
             ProcessXEvent();
+            return true;
+        }
+        return false;
     }
 
     private void ProcessXEvent()
@@ -459,5 +463,15 @@ public class Window_Graph : MonoBehaviour
                 AddPoint(nextY);
                 break;
         }
+    }
+
+    public Vector2 getLatestPoint()
+    {
+        return new Vector2(objective_index - 1, points[^1]);
+    }
+
+    public float getLatestObjectivePoint()
+    {
+        return objective_points[objective_index - 1];
     }
 }
