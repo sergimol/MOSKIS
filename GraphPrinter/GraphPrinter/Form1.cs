@@ -26,6 +26,8 @@ namespace GraphPrinter
         {
             try 
             {
+                if(showingGraph)
+                    resetGraph();
                 // Mostrar el cuadro de diálogo para abrir el archivo
                 openFileDialog1.ShowDialog();
                 // Abrir el archivo asegurando que tenga la extensión .csv
@@ -39,7 +41,7 @@ namespace GraphPrinter
                 graph.Titles.First().Text = events[0];
                 graph.Titles.Last().Text = events[1];
 
-                // Asigna el valor mínimo al espacio para las gráficas para que no empiece en -1
+                // Poner los valores mínimos a 0 para que las gráficas no empiecen en -1
                 graph.ChartAreas[0].AxisX.Minimum = 0;
                 graph.ChartAreas[0].AxisY.Minimum = 0;
 
@@ -74,9 +76,30 @@ namespace GraphPrinter
         {
             if (showingGraph)
             {
-                string imageName = fileName.Split('.')[0];
-                graph.SaveImage(imageName + ".png", ChartImageFormat.Png);
+                try
+                {
+                    string[] defaultName = fileName.Split(Path.DirectorySeparatorChar, '.');
+                    saveFileDialog1.FileName = defaultName[defaultName.Length - 2] + ".png";
+                    saveFileDialog1.ShowDialog();
+                    string imageName = saveFileDialog1.FileName;//fileName.Split('.')[0];
+                    if (Path.GetExtension(imageName) != ".png")
+                        throw new InvalidOperationException("El archivo a guardar debe ser tipo PNG");
+                    graph.SaveImage(imageName, ChartImageFormat.Png);
+                }
+                catch 
+                {
+                    
+                }
             }
+        }
+
+        private void resetGraph()
+        {
+            graph.ChartAreas[0].AxisX.Maximum = 0;
+            graph.ChartAreas[0].AxisY.Maximum = 0;
+            graph.Series.FindByName("Obtenida").Points.Clear();
+            graph.Series.FindByName("Diseñada").Points.Clear();
+            showingGraph = false;
         }
     }
 }
