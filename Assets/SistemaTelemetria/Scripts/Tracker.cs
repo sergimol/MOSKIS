@@ -19,6 +19,8 @@ public class Tracker : MonoBehaviour
     [SerializeField] bool filePers = true;
     ServerPersistence serverPersistence;
     [SerializeField] bool serverPers = true;
+    GraphPersistence graphPersistence;
+    [SerializeField] bool graphPers = true;
 
     void Awake()
     {
@@ -39,6 +41,7 @@ public class Tracker : MonoBehaviour
         config = GetComponent<TrackerConfig>();
         filePersistence = GetComponent<FilePersistence>();
         serverPersistence = GetComponent<ServerPersistence>();
+        graphPersistence = GetComponent<GraphPersistence>();
 
         sessionId = AnalyticsSessionInfo.sessionId;
     }
@@ -57,6 +60,15 @@ public class Tracker : MonoBehaviour
         }
         else
             tSinceLastPost += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AddEvent(new InicioEvent());
+        }
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            AddEvent(new FinEvent());
+        }
     }
 
     private void OnDestroy()
@@ -78,6 +90,7 @@ public class Tracker : MonoBehaviour
         {
             if (filePers) filePersistence.Send(e);
             if (serverPers) serverPersistence.Send(e);
+            if (graphPers) graphPersistence.Send(e);
         }
     }
 

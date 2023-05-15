@@ -19,9 +19,9 @@ public class Window_Graph : MonoBehaviour
 
     // Puntos del diseñador
     //List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
-    public List<float> objetive_points;
+    List<float> objective_points;
     [SerializeField]
-    LineRenderer objetive_line_renderer;
+    LineRenderer objective_line_renderer;
 
     // Containers para los objetos
     [SerializeField]
@@ -47,37 +47,42 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform dash_template_Y;
 
-    // Dimensiones del Grafico
-    float graph_Height;
-    float graph_Width;
+    
 
     float x_size; // distancia entre puntos de X
     float y_size; // distancia entre puntos de Y
     float x_pos = 0;
 
-    int x_segments = 10; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
-    int y_segments = 8; // numero de separaciones que tiene el Eje Y
+    // Configuración del gráfico
+    GraphConfig graphConfig;
+    /*ESTO ESTÁ DENTRO DE GRAPHCONFIG
+    // Dimensiones del Grafico
+    //public float graph_Height;
+    //public float graph_Width;
+    //public int x_segments = 10; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
+    //public int y_segments = 8; // numero de separaciones que tiene el Eje Y
     // |-------------*-
     // |-------*------- 
     // |----*-----*----
     // |-*-------------
     // +---------------
     // Los puntos se van ocultando por la izquierda <- <- <-
-
+    */
 
     float x_max; // Valor maximo que tiene el Eje X en cada momento
                  // Cada vez que se añade un punto se suma
     float y_max; // Valor maximo que puede alcanzar el Eje Y 
                  // Inicialmente lo determina el mayor valor de la grafica del diseñador
                  // Posteriormente se actualiza si aparecen valores mayores
-
-    int acostada = 1;
+    
+    // Contador para colocar el siguiente punto generado por eventos
+    float nextY = 0;
 
     // Listas de objetos generados
     TextMeshProUGUI[] label_Y_List;
     List<TextMeshProUGUI> label_X_List;
     List<GameObject> circles;
-    List<GameObject> objetive_circles;
+    List<GameObject> objective_circles;
     int objective_index = 0;
 
 
@@ -86,57 +91,63 @@ public class Window_Graph : MonoBehaviour
     ScrollRect render_viewport;
 
 
-    private void Start()
+    public void SetConfig(GraphConfig g)
     {
-        label_Y_List = new TextMeshProUGUI[y_segments + 1];
+        graphConfig = g;
+        label_Y_List = new TextMeshProUGUI[graphConfig.y_segments + 1];
 
-        // Altura del grid
-        graph_Height = graph_container.sizeDelta.y;
-        // Ancho del grid
-        graph_Width = graph_container.sizeDelta.x;
+        // Altura del grid, altura base 5
+        graphConfig.graph_Height *= graph_container.sizeDelta.y / 5;
+        // Ancho del grid, anchuira base 5
+        graphConfig.graph_Width *= graph_container.sizeDelta.x / 5;
 
-        x_segments--;
+        graphConfig.x_segments--;
 
         circles = new List<GameObject>();
-        objetive_circles = new List<GameObject>();
+        objective_circles = new List<GameObject>();
         points = new List<float>();
         label_X_List = new List<TextMeshProUGUI>();
 
-        x_max = x_segments;
+        x_max = graphConfig.x_segments;
 
+        List<float> objectiveLineAux = new List<float>();
+
+        for (int i = 0; i < graphConfig.myCurve.length; ++i)
+        {
+            float aux = graphConfig.myCurve.Evaluate(i);
+            objectiveLineAux.Add(aux);
+        }
+        SetObjectiveLine(objectiveLineAux);
         y_max = getMaxFromList();
 
         ShowGraph();
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AddPoint(Random.Range(0, 100));
-        }
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AddPoint(acostada);
-            acostada *= 2;
-        }
+        
     }
 
     void ShowGraph()
     {
-        x_size = graph_Width / x_segments;
-        y_size = graph_Height / y_segments;
+        x_size = graphConfig.graph_Width / graphConfig.x_segments;
+        y_size = graphConfig.graph_Height / graphConfig.y_segments;
+
+        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
+        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
 
         float x = 0;
         float y = x;
 
         // MARCADORES EJE X
-        for (int i = 0; i < x_segments + 1; i++)
+        for (int i = 0; i < graphConfig.x_segments + 1; i++)
         {
             RectTransform dashX = Instantiate(dash_template_X, lines_container.transform);
             dashX.anchoredPosition = new Vector2(x, 0);
-            dashX.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Height);
+            dashX.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Height);
 
             RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
             labelX.anchoredPosition = new Vector2(x, 0);
@@ -147,21 +158,41 @@ public class Window_Graph : MonoBehaviour
         }
 
         // MARCADORES EJE Y
-        for (int i = 0; i < y_segments + 1; i++)
+        for (int i = 0; i < graphConfig.y_segments + 1; i++)
         {
 
             RectTransform dashY = Instantiate(dash_template_Y, lines_container.transform);
             dashY.anchoredPosition = new Vector2(0, y);
-            dashY.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graph_Width);
+            dashY.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
 
             RectTransform labelY = Instantiate(label_template_Y, label_Y_container.transform);
             labelY.anchoredPosition = new Vector2(0, y);
-            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / y_segments) * i).ToString();
+            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / graphConfig.y_segments) * i).ToString();
 
             y += y_size;
 
             label_Y_List[i] = labelY.GetComponent<TextMeshProUGUI>();
         }
+
+        // Leyenda //
+        RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
+        dash_obj.anchoredPosition = new Vector2(0, -16);
+        dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
+
+        RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
+        legend_obj.anchoredPosition = new Vector2(83, 0);
+        legend_obj.GetComponent<TextMeshProUGUI>().text = "Curva Diseñada";
+        legend_obj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+
+
+        RectTransform dash_player = Instantiate(dash_template_Y, dash_obj.transform);
+        dash_player.anchoredPosition = new Vector2(105, 0);
+        dash_player.GetComponent<Image>().color = line_renderer.material.color;
+
+        RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
+        legend_player.anchoredPosition = new Vector2(82, 0);
+        legend_player.GetComponent<TextMeshProUGUI>().text = "Curva Obtenida";
+        legend_player.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
     }
 
@@ -171,29 +202,31 @@ public class Window_Graph : MonoBehaviour
         /// PUNTO TELEMETRIA
         // Añadimos el nuevo punto
         points.Add(new_y);
-        CheckMove(new Vector2(points.Count - 1, new_y));
         Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
 
         // Lo creamos
-        float y_pos = (points[points.Count - 1] / y_max) * graph_Height;
+        float y_pos = (points[points.Count - 1] / y_max) * graphConfig.graph_Height;
         GameObject point_object = CreateCircle(new Vector2(x_pos, y_pos));
         circles.Add(point_object);
 
 
         /// PUNTO OBJETIVO
         // Añadimos el nuevo punto
-        if (objetive_points.Count >= points.Count)
+        if (objective_points.Count >= points.Count)
         {
-            CheckMove(new Vector2(objective_index, new_y));
+            
             Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
-            Debug.Log("P: " + points.Count + "  O:" + objetive_points.Count);
+            Debug.Log("P: " + points.Count + "  O:" + objective_points.Count);
 
             // Lo creamos
-            float o_y_pos = (objetive_points[objective_index] / y_max) * graph_Height;
+            float o_y_pos = (objective_points[objective_index] / y_max) * graphConfig.graph_Height;
             GameObject o_point_object = CreateCircle(new Vector2(x_pos, o_y_pos));
-            objetive_circles.Add(o_point_object);
+            objective_circles.Add(o_point_object);
             objective_index++;
         }
+
+        // Se hace el check de los dos puntos a la vez para evitar reescalar dos veces
+        CheckMove(new Vector2(objective_index, new_y), new Vector2(points.Count - 1, new_y));
 
         x_pos += x_size;
 
@@ -240,7 +273,7 @@ public class Window_Graph : MonoBehaviour
         List<Vector3> aux_o = new List<Vector3>();
         for (int i = 0; i < objective_index; i++)
         {
-            Transform t = objetive_circles[i].transform;
+            Transform t = objective_circles[i].transform;
 
             // Comprobamos que el punto se este renderizando en el Viewport
             if (RectTransformUtility.RectangleContainsScreenPoint(render_viewport.viewport, t.transform.position))
@@ -257,8 +290,8 @@ public class Window_Graph : MonoBehaviour
         }
 
         // Creamos la linea 
-        objetive_line_renderer.positionCount = aux_o.Count;
-        objetive_line_renderer.SetPositions(aux_def_o);
+        objective_line_renderer.positionCount = aux_o.Count;
+        objective_line_renderer.SetPositions(aux_def_o);
     }
 
     // Desplaza la Grafica a la Izquierda 1 posicion
@@ -274,20 +307,35 @@ public class Window_Graph : MonoBehaviour
         label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
     }
 
-    private void CheckMove(Vector2 newPoint)
+    private void CheckMove(Vector2 newPoint, Vector2 newPoint2)
     {
-        // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
-        if (newPoint.y > y_max)
+        if (graphConfig.scaling != Scaling.ONLY_Y)
         {
-            y_max = newPoint.y;
+            if (newPoint.y > y_max)
+                y_max = newPoint.y;
+            if(newPoint2.y > y_max)
+                y_max = newPoint2.y;
+            // Si el escalado en X está activo se debe reescalar en cada nuevo punto añadido
             ReScalePoints();
         }
-
-        // Si Añadimos un nuevo punto y hay que desplazar la Grafica
-        if (newPoint.x > x_max)
+        else
         {
-            MoveLeft();
-            x_max = newPoint.x;
+            // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
+            if (newPoint.y > y_max || newPoint2.y > y_max)
+            {
+                // y_max se quedará con la Ý más grande de entre los dos puntos si hay al menos uno que supera la y_max anterior
+                y_max = newPoint.y > newPoint2.y ? newPoint.y : newPoint2.y;
+                ReScalePoints();
+            }
+
+            // Si Añadimos un nuevo punto y hay que desplazar la Grafica
+            if (newPoint.x > x_max || newPoint2.x > x_max)
+            {
+                MoveLeft();
+                // x_max será el más grande de los dos puntos
+                // Normalmente irán a la vez
+                x_max = newPoint.x > newPoint2.x ? newPoint.x : newPoint2.x;
+            }
         }
     }
 
@@ -314,37 +362,116 @@ public class Window_Graph : MonoBehaviour
 
     private float getMaxFromList()
     {
-        return objetive_points.Max();
+        return objective_points.Max();
     }
 
     // Re Escalamos los puntos para que se ajusten a los nuevos valores maximos del eje Y
     private void ReScalePoints()
     {
+        // Escalado de los eventos del jugador
         for (int i = 0; i < circles.Count; i++)
         {
             RectTransform rect = circles[i].GetComponent<RectTransform>();
-            float y_pos = (points[i] / y_max) * graph_Height;
-            Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
-            rect.anchoredPosition = pos;
-        }
-        for (int i = 0; i < objetive_circles.Count; i++)
-        {
-            RectTransform rect = objetive_circles[i].GetComponent<RectTransform>();
-            float y_pos = (objetive_points[i] / y_max) * graph_Height;
-            Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
-            rect.anchoredPosition = pos;
+            float y_pos = (points[i] / y_max) * graphConfig.graph_Height;
+
+            // Si está activo el escalado en x el nuevo vector deberá calcular la nueva posición en X también
+            // Si está activo el escalado con offset, se espera hasta llegar a los segmentos de X
+            if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+            {
+                float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
+                Vector2 pos = new Vector2(x_pos, y_pos);
+                rect.anchoredPosition = pos;
+            }
+            else
+            {
+                Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+                rect.anchoredPosition = pos;
+            }
         }
 
+        // Escalado de los eventos del diseñador
+        for (int i = 0; i < objective_circles.Count; i++)
+        {
+            RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
+            float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
+
+            if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+            {
+                float x_pos = ((float)i / (objective_circles.Count - 1)) * graphConfig.graph_Width;
+                Vector2 pos = new Vector2(x_pos, y_pos);
+                rect.anchoredPosition = pos;
+            }
+            else
+            {
+                Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+                rect.anchoredPosition = pos;
+            }
+        }
+
+        // Cambio en el texto de los segmentos en Y
         for (int i = 0; i < label_Y_List.Length; i++)
         {
-            label_Y_List[i].text = ((y_max / y_segments) * i).ToString();
+            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F2"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
         }
+
+        if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+        {
+            // Reescalado de los puntos en X que se actualiza cuando se añaden
+            for (int i = 0; i < label_X_List.Count; i++)
+            {
+                label_X_List[i].text = (((float)(circles.Count - 1) / (float)graphConfig.x_segments) * i).ToString("F2");
+            }
+        }
+        
     }
 
     // Inicializa la lista de puntos del Diseñador (Llamar desde la persistencia al crear)
     // He puesto que pasais una lista, si pasais un vector pos lo cambiais jeje
-    public void SetObjetiveLine(List<float> o)
+    public void SetObjectiveLine(List<float> o)
     {
-        objetive_points = new List<float>(o);
+        objective_points = new List<float>(o);
+    }
+
+    // Recibe un evento desde el sistema de persistencia y lo procesa si es necesario. Devuelve true solo si escribe un nuevo punto en la gráfica
+    public bool ReceiveEvent(TrackerEvent e)
+    {
+        string eventType = e.GetEventType();
+        // Si el tipo del evento es igual que el del eje Y aumenta el contador que coloca el siguiente punto en Y
+        if (eventType == graphConfig.eventY)
+            nextY++;
+        // Si el tipo del evento es igual que el del eje X coloca el siguiente punto teniendo en cuenta el tipo de gráfica
+        else if (eventType == graphConfig.eventX)
+        {
+            ProcessXEvent();
+            return true;
+        }
+        return false;
+    }
+
+    private void ProcessXEvent()
+    {
+        switch (graphConfig.graphType)
+        {
+            case GraphTypes.AVERAGE:
+                AddPoint(nextY / (points.Count + 1));
+                break;
+            case GraphTypes.NOTACCUMULATED:
+                AddPoint(nextY);
+                nextY = 0;
+                break;
+            default:
+                AddPoint(nextY);
+                break;
+        }
+    }
+
+    public Vector2 getLatestPoint()
+    {
+        return new Vector2(objective_index - 1, points[^1]);
+    }
+
+    public float getLatestObjectivePoint()
+    {
+        return objective_points[objective_index - 1];
     }
 }

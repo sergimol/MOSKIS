@@ -67,6 +67,7 @@ public class FilePersistence : IPersistence
         if (xmlStream != null) xmlStream.Close();
         if (csvStream != null) csvStream.Close();
     }
+
     public override void Send(TrackerEvent e)
     {
         eventsBuff.Add(e);
