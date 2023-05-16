@@ -61,3 +61,4 @@ sysinfo.txt
 crashlytics-build.properties
 
 !GraphPrinter/GraphPrinter.sln
+!GraphPrinter/GraphPrinter/GraphPrinter.csproj
