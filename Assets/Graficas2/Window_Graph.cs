@@ -10,7 +10,7 @@ public class Window_Graph : MonoBehaviour
 {
     [SerializeField]
     Sprite circle_sprite;
-    float circle_scale = 5;
+    float circle_scale = 20;
 
     // Puntos de la telemetria
     List<float> points;
@@ -97,9 +97,9 @@ public class Window_Graph : MonoBehaviour
         label_Y_List = new TextMeshProUGUI[graphConfig.y_segments + 1];
 
         // Altura del grid, altura base 5
-        graphConfig.graph_Height *= graph_container.sizeDelta.y / 5;
+        graphConfig.graph_Height *= graph_container.sizeDelta.y;
         // Ancho del grid, anchuira base 5
-        graphConfig.graph_Width *= graph_container.sizeDelta.x / 5;
+        graphConfig.graph_Width *= graph_container.sizeDelta.x;
 
         graphConfig.x_segments--;
 
@@ -123,6 +123,21 @@ public class Window_Graph : MonoBehaviour
         ShowGraph();
 
 
+        // Obtener el tamaño de la resolución actual de la pantalla
+        Resolution resolution = Screen.currentResolution;
+
+        // Mostrar el ancho y alto en la consola
+        Debug.Log("Ancho de pantalla: " + resolution.width);
+        Debug.Log("Alto de pantalla: " + resolution.height);
+
+        // Obtener el tamaño de la ventana de juego
+        int windowWidth = Screen.width;
+        int windowHeight = Screen.height;
+
+        // Mostrar el ancho y alto en la consola
+        Debug.Log("Ancho de la ventana de juego: " + windowWidth);
+        Debug.Log("Alto de la ventana de juego: " + windowHeight);
+
     }
 
     // Update is called once per frame
@@ -136,8 +151,8 @@ public class Window_Graph : MonoBehaviour
         x_size = graphConfig.graph_Width / graphConfig.x_segments;
         y_size = graphConfig.graph_Height / graphConfig.y_segments;
 
-        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
-        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
+        //graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
+        //graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
 
         float x = 0;
         float y = x;
@@ -175,24 +190,24 @@ public class Window_Graph : MonoBehaviour
         }
 
         // Leyenda //
-        RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
-        dash_obj.anchoredPosition = new Vector2(0, -16);
-        dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
+        //RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
+        //dash_obj.anchoredPosition = new Vector2(0, -16);
+        //dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
 
-        RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
-        legend_obj.anchoredPosition = new Vector2(83, 0);
-        legend_obj.GetComponent<TextMeshProUGUI>().text = "Curva Diseñada";
-        legend_obj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+        //RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
+        //legend_obj.anchoredPosition = new Vector2(83, 0);
+        //legend_obj.GetComponent<TextMeshProUGUI>().text = "Curva Diseñada";
+        //legend_obj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
 
-        RectTransform dash_player = Instantiate(dash_template_Y, dash_obj.transform);
-        dash_player.anchoredPosition = new Vector2(105, 0);
-        dash_player.GetComponent<Image>().color = line_renderer.material.color;
+        //RectTransform dash_player = Instantiate(dash_template_Y, dash_obj.transform);
+        //dash_player.anchoredPosition = new Vector2(105, 0);
+        //dash_player.GetComponent<Image>().color = line_renderer.material.color;
 
-        RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
-        legend_player.anchoredPosition = new Vector2(82, 0);
-        legend_player.GetComponent<TextMeshProUGUI>().text = "Curva Obtenida";
-        legend_player.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+        //RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
+        //legend_player.anchoredPosition = new Vector2(82, 0);
+        //legend_player.GetComponent<TextMeshProUGUI>().text = "Curva Obtenida";
+        //legend_player.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
     }
 
