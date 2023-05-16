@@ -126,17 +126,12 @@ public class Window_Graph : MonoBehaviour
         // Obtener el tamaño de la resolución actual de la pantalla
         Resolution resolution = Screen.currentResolution;
 
-        // Mostrar el ancho y alto en la consola
-        Debug.Log("Ancho de pantalla: " + resolution.width);
-        Debug.Log("Alto de pantalla: " + resolution.height);
 
         // Obtener el tamaño de la ventana de juego
         int windowWidth = Screen.width;
         int windowHeight = Screen.height;
 
-        // Mostrar el ancho y alto en la consola
-        Debug.Log("Ancho de la ventana de juego: " + windowWidth);
-        Debug.Log("Alto de la ventana de juego: " + windowHeight);
+
 
     }
 
@@ -217,7 +212,7 @@ public class Window_Graph : MonoBehaviour
         /// PUNTO TELEMETRIA
         // Añadimos el nuevo punto
         points.Add(new_y);
-        Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
+        //Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
 
         // Lo creamos
         float y_pos = (points[points.Count - 1] / y_max) * graphConfig.graph_Height;
@@ -230,8 +225,8 @@ public class Window_Graph : MonoBehaviour
         if (objective_points.Count >= points.Count)
         {
             
-            Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
-            Debug.Log("P: " + points.Count + "  O:" + objective_points.Count);
+            //Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
+            //Debug.Log("P: " + points.Count + "  O:" + objective_points.Count);
 
             // Lo creamos
             float o_y_pos = (objective_points[objective_index] / y_max) * graphConfig.graph_Height;

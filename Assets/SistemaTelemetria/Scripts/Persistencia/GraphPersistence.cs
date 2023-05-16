@@ -12,12 +12,11 @@ using Newtonsoft.Json.Linq;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEditor.PackageManager.UI;
+using static Unity.Burst.Intrinsics.X86;
 
 public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
 public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
 public enum Constrains { FREE_CONFIG, LEFT_TOP, LEFT_BOTTOM, LEFT_VERTICAL, RIGHT_VERTICAL }
-
-public enum awebo { H_AB, H_AR, V_D, V_I, L }
 
 
 [Serializable]
@@ -71,6 +70,10 @@ public class GraphPersistence : IPersistence
 
     float preset_Scale = 1f;
 
+    Resolution resolution;
+    int max_charts_per_row = 4;
+    int max_charts_per_col = 4;
+
     private void Start()
     {
         eventsBuff = new();
@@ -94,20 +97,19 @@ public class GraphPersistence : IPersistence
         // ESTO ESTA SIENDO DELICADO
         CanvasScaler mivieja = canvasObject.GetComponent<CanvasScaler>();
         mivieja.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        Resolution res = Screen.currentResolution;
-        mivieja.referenceResolution = new Vector2(res.width, res.height);
+        resolution = Screen.currentResolution;
+        mivieja.referenceResolution = new Vector2(resolution.width, resolution.height);
 
         //Crear tantos Graph como se han configurado y pasarles la informaci�n
         Array.Resize(ref graphs, graphsConfig.Count());
+        int cuadIndex = 0;
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
             // Creamos el objeto grafica
             GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
 
             // Rescalamos y posicionamos 
-            aux.GetComponent<RectTransform>().localScale = new Vector3(preset_Scale / graphsConfig.Count(), preset_Scale / graphsConfig.Count(), preset_Scale);
-            float offset = (res.width / graphsConfig.Count()) * i;
-            aux.GetComponent<RectTransform>().anchoredPosition = new Vector2(offset, graphsConfig[i].graph_Y);
+            SetGraphInWindow(ref aux, i, cuadIndex);
 
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
@@ -117,6 +119,9 @@ public class GraphPersistence : IPersistence
             graphWriters.Add(graphsConfig[i].name, new StreamWriter(fullRoute + graphsConfig[i].name + ".csv"));
             graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
 
+            cuadIndex++;
+            if(cuadIndex >= max_charts_per_row)
+                cuadIndex = 0;
         }
 
 
@@ -156,6 +161,56 @@ public class GraphPersistence : IPersistence
         //List<TrackerEvent> events = new List<TrackerEvent>(eventsBuff);
         //eventsBuff.Clear();
         //Write(events);
+    }
+
+    // Ajusta la posicion y escala de la Grafica
+    private void SetGraphInWindow( ref GameObject chart, int index, int cuadIndex)
+    {
+        RectTransform rectChart = chart.GetComponent<RectTransform>();
+        rectChart.localScale = new Vector3(preset_Scale / max_charts_per_row, preset_Scale / max_charts_per_row, preset_Scale / max_charts_per_row);
+
+        float offsetX = 0;
+        float offsetY = 0;
+        int row = 0;
+        int col = 0;
+
+        switch (constrainsGraphs)
+        {
+            // HORIZONTAL ABAJO
+            case Constrains.LEFT_BOTTOM:
+                float aux_offset = 0;
+                if (index >= 4) aux_offset = 50;
+                offsetX = (resolution.width / max_charts_per_row) * cuadIndex;
+                row = index / max_charts_per_row;
+                offsetY = rectChart.anchoredPosition.y + row * (rectChart.rect.height / max_charts_per_row); // el height es el original por eso hay que reescalarlo para abajo
+                rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
+                break;
+
+            case Constrains.LEFT_TOP:
+                offsetX = (resolution.width / max_charts_per_row) * cuadIndex;
+                row = index / max_charts_per_row;
+                // este 1080 hay que sacarlo a una variable porque el height del graph no es exacto y no da pa las cuentas
+                offsetY = resolution.height - ((row+1) * (1080 / max_charts_per_row)); // el height es el original por eso hay que reescalarlo para abajo
+                rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
+                break;
+
+            case Constrains.LEFT_VERTICAL:
+                col = index / max_charts_per_col;
+                offsetX = (1920 / max_charts_per_col) * col;
+                offsetY = resolution.height - (1080 / max_charts_per_col) - (resolution.height / max_charts_per_col) * cuadIndex; // el height es el original por eso hay que reescalarlo para abajo
+                rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
+                break;
+
+            case Constrains.RIGHT_VERTICAL:
+                col = index / max_charts_per_col;
+                offsetX = resolution.width - (1920 / max_charts_per_col) * (col + 1);
+                offsetY = resolution.height - (1080 / max_charts_per_col) - (resolution.height / max_charts_per_col) * cuadIndex; // el height es el original por eso hay que reescalarlo para abajo
+                rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
+                break;
+
+            case Constrains.FREE_CONFIG:
+                break;
+        }
     }
 }
 
@@ -251,4 +306,5 @@ public class GraphPersistenceEditor : Editor
 
         serializedObject.ApplyModifiedProperties();
     }
+
 }
