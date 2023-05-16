@@ -57,6 +57,10 @@ public struct GraphConfig
     public float point_Size;
     [HideInInspector]
     public GraphTypes graphType;
+    [HideInInspector]
+    public Color designerGraphCol;
+    [HideInInspector]
+    public Color actualGraphCol;
 }
 
 public class GraphPersistence : IPersistence
@@ -318,6 +322,11 @@ public class GraphPersistenceEditor : Editor
             actGraphConf.y_segments = EditorGUILayout.IntField("Y segments", actGraphConf.y_segments);
             if (actGraphConf.y_segments < 2)
                 actGraphConf.y_segments = 2;
+
+            actGraphConf.designerGraphCol = EditorGUILayout.ColorField("DesignerGraph", actGraphConf.designerGraphCol);
+            actGraphConf.designerGraphCol.a = 1;
+            actGraphConf.actualGraphCol = EditorGUILayout.ColorField("ActualGraph", actGraphConf.actualGraphCol);
+            actGraphConf.actualGraphCol.a = 1;
 
             EditorGUILayout.Space(20);
             graphPersistence.graphsConfig[i] = actGraphConf;
