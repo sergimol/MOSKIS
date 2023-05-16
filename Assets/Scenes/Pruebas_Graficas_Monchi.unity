@@ -582,7 +582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].scale
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[10].name
@@ -623,6 +623,10 @@ PrefabInstance:
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[19].name
       value: s
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].scale
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].eventX
@@ -795,6 +799,14 @@ PrefabInstance:
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[19].eventY
       value: Fin
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].graph_X
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: graphsConfig.Array.data[1].graph_Y
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[1].scaling
