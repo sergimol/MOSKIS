@@ -12,8 +12,50 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using UnityEditor.PackageManager.UI;
 
+/*
+ * GraphTypes define las diferentes formas de contar los eventos
+ * 
+ * ACCUMULATED: Se acumula la cantidad de veces que aparece el evento Y desde el inicio hasta el numero de veces que haya aparecido X
+ * 
+ * NOTACCUMULATED: Cada vez que aparece un evento X, se reinicia la cantidad de veces que ha aparecido el evento Y
+ * 
+ * AVERAGE: Cada vez que aparece el evento X se hace una media de las veces que ha aparecido el evento Y desde el inicio
+ * 
+ */
 public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
+
+/*
+ * Scaling define las diferentes formas en las que se escalan las lineas dentro de los charts
+ * 
+ * X_SCALING_START: La linea ocupa siempre todo el chart en X y con cada evento nuevo se estrecha para insertar el nuevo punto
+ * 
+ * X_SCALING_OFFSET: La linea empieza de la izquierda y avanza x_segments veces para llegar a ocupar todos los valores de X,
+ *      luego se estrecha para insertar nuevos puntos
+ *      
+ * ONLY_Y: La linea empieza de la izquierda y avanza x_segments veces para llegar a ocupar todos los valores de X,
+ *      luego se mueven todos los puntos a la izquierda cuando es necesario insertar uno nuevo,
+ *      las distancias entre los puntos son siempre las mismas.
+ * 
+ */
 public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
+
+/*
+ * Constraints define de que manera se van a colocar los charts dentro de la pantalla
+ * 
+ * FREE_CONFIG: Se deja al diseñador que mueva cada chart individualmente y lo escale como quiera,
+ *      con las variables graph_X, graph_Y y scale
+ *      
+ * LEFT_TOP: El primer chart se coloca arriba a la izquierda y los siguientes se situan directamente a la derecha,
+ *      cuando no haya espacio en la pantalla para mas se empezara debajo del primero y siguiendo a la derecha
+ *      
+ * LEFT_BOTTOM: El primer chart se coloca abajo a la izquierda y los siguientes a la derecha, la siguiente fila empieza encima del primero
+ * 
+ * LEFT_VERTICAL: El primer chart se coloca arriba a la izquierda y los siguientes se situan directamente abajo,
+ *      cuando no haya espacio en la pantalla para mas se empezara a la derecha del primero y siguiendo abajo
+ *      
+ * RIGHT_VERTICAL: El primer chart se coloca arriba a la derecha y los siguientes abajo, la siguiente columna empieza a la izquierda del primero
+ * 
+ */
 public enum Constrains { FREE_CONFIG, LEFT_TOP, LEFT_BOTTOM, LEFT_VERTICAL, RIGHT_VERTICAL }
 
 [Serializable]
@@ -100,14 +142,14 @@ public class GraphPersistence : IPersistence
         canvasObject.transform.SetParent(transform, false);     // Hacer que el objeto Canvas sea hijo del objeto padre
         canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         canvasObject.GetComponent<Canvas>().worldCamera = Camera.main;
-        canvasObject.GetComponent<Canvas>().scaleFactor = 1f;  //!CUIDAO
+        canvasObject.GetComponent<Canvas>().scaleFactor = 1f;
 
 
         // Resolucion
-        CanvasScaler mivieja = canvasObject.GetComponent<CanvasScaler>();
-        mivieja.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        CanvasScaler cScaler = canvasObject.GetComponent<CanvasScaler>();
+        cScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         resolution = Screen.currentResolution;
-        mivieja.referenceResolution = new Vector2(resolution.width, resolution.height);
+        cScaler.referenceResolution = new Vector2(resolution.width, resolution.height);
         //Tamano
         dimension = new Vector2(Screen.width, Screen.height);
 
@@ -147,9 +189,12 @@ public class GraphPersistence : IPersistence
         {
             graphs[i].RefreshChart();
         }
+    }
 
+    private void Update()
+    {
         // Con la tecla Q se desactivan todos los charts
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.RightControl))
             transform.GetChild(0).transform.gameObject.SetActive(!transform.GetChild(0).transform.gameObject.activeSelf);
     }
 
@@ -162,7 +207,6 @@ public class GraphPersistence : IPersistence
     }
     public override void Send(TrackerEvent e)
     {
-        //eventsBuff.Add(e);
         for (int i = 0; i < graphs.Length; ++i)
         {
             // Comprueba si la grafica tiene el evento y si debe mostrar un nuevo punto
@@ -252,7 +296,6 @@ public class GraphPersistenceEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        //EditorUtility.SetDirty(target);
         EditorGUILayout.PropertyField(grPers);
 
         GraphPersistence graphPersistence = (GraphPersistence)target;
@@ -277,7 +320,7 @@ public class GraphPersistenceEditor : Editor
             GraphConfig actGraphConf = graphPersistence.graphsConfig[i];
             actGraphConf.name = EditorGUILayout.TextField("GraphName", actGraphConf.name);
             if (actGraphConf.name == "" || (i-1 >=0 && actGraphConf.name == graphPersistence.graphsConfig[i-1].name))
-                actGraphConf.name = "Char" + i;
+                actGraphConf.name = "Chart" + i;
 
             actGraphConf.pointsNumber = EditorGUILayout.IntField("NumberPoints", actGraphConf.pointsNumber);
             if (actGraphConf.pointsNumber < 1)

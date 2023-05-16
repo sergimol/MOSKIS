@@ -18,7 +18,6 @@ public class Window_Graph : MonoBehaviour
     LineRenderer line_renderer;
 
     // Puntos del disenador
-    //List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
     List<float> objective_points;
     [SerializeField]
     LineRenderer objective_line_renderer;
@@ -159,8 +158,8 @@ public class Window_Graph : MonoBehaviour
         obj_image.color = m[0].color;
         List<Material> m2 = new List<Material>();
         objective_line_renderer.GetMaterials(m2);
-        track_image.color = m2[0].color;
         m2[0].color = graphConfig.designerGraphCol;
+        track_image.color = m2[0].color;
         chart_name.text = g.name;
 
     }
@@ -183,7 +182,7 @@ public class Window_Graph : MonoBehaviour
 
             RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
             labelX.anchoredPosition = new Vector2(x, 0);
-            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString("F1");
+            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString("F1"); // F1 hace que se quede solo con 1 decimal para evitar floats grandes
             label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
 
             x += x_size;
@@ -245,11 +244,8 @@ public class Window_Graph : MonoBehaviour
 
     // Crea la linea que une todos los puntos
     // Solo dibuja la linea entre los puntos que se renderizan dentro del viewport
-    // Ahora como esta hay que cambiarlo
     private void CreateLine()
     {
-        // MUCHO BUCLE, IGUAL HAY QUE CAMBIARLO //
-
         /// TELEMETRIA ///
         // Creamos una lista de Posiciones dentro del Viewport
         List<Vector3> aux = new List<Vector3>();
@@ -427,7 +423,7 @@ public class Window_Graph : MonoBehaviour
         // Cambio en el texto de los segmentos en Y
         for (int i = 0; i < label_Y_List.Length; i++)
         {
-            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F1"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
+            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F1"); // F1 hace que se quede solo con 1 decimal para evitar floats grandes
         }
 
         if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
