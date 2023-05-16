@@ -9,10 +9,8 @@ using System.Linq;
 using static UnityEngine.GraphicsBuffer;
 using System.Net.Security;
 using Newtonsoft.Json.Linq;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEditor.PackageManager.UI;
-using static Unity.Burst.Intrinsics.X86;
 
 public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
 public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
@@ -230,6 +228,11 @@ public class GraphPersistence : IPersistence
                 rectChart.anchoredPosition = new Vector2(graphsConfig[index].graph_X, graphsConfig[index].graph_Y);
                 rectChart.localScale = new Vector3(preset_Scale * graphsConfig[index].scale, preset_Scale * graphsConfig[index].scale, preset_Scale * graphsConfig[index].scale); break;
         }
+    }
+
+    public GameObject getChartCanvas()
+    {
+        return transform.GetChild(0).gameObject;
     }
 }
 
