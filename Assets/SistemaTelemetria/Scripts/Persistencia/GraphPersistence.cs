@@ -217,13 +217,20 @@ public class GraphPersistenceEditor : Editor
             EditorGUILayout.Space(20);
         }
         EditorGUILayout.Space();
-        graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
-
-        //Si ha habido cambios utilizamos setDirty para que unity no cambie los valores de editor y se mantengan para ejecucion
-        if (EditorGUI.EndChangeCheck())        
-            EditorUtility.SetDirty(target);
-        
-        // Guarda los cambios realizados en el editor
+        graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
+
+
+
+        //Si ha habido cambios utilizamos setDirty para que unity no cambie los valores de editor y se mantengan para ejecucion
+
+        if (EditorGUI.EndChangeCheck())        
+
+            EditorUtility.SetDirty(target);
+
+        
+
+        // Guarda los cambios realizados en el editor
+
         serializedObject.ApplyModifiedProperties();
     }
 }
