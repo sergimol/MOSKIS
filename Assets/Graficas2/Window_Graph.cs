@@ -47,7 +47,7 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform dash_template_Y;
 
-    
+
 
     float x_size; // distancia entre puntos de X
     float y_size; // distancia entre puntos de Y
@@ -74,7 +74,7 @@ public class Window_Graph : MonoBehaviour
     float y_max; // Valor maximo que puede alcanzar el Eje Y 
                  // Inicialmente lo determina el mayor valor de la grafica del disenador
                  // Posteriormente se actualiza si aparecen valores mayores
-    
+
     // Contador para colocar el siguiente punto generado por eventos
     float nextY = 0;
 
@@ -143,7 +143,11 @@ public class Window_Graph : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //if (graph_container.localScale.x != graphConfig.scale)
+        //{
+        //    Debug.Log("Escala actualizada");
+        //    graph_container.localScale = new Vector3(graphConfig.scale, graphConfig.scale, graphConfig.scale);
+        //}
     }
 
     void ShowGraph()
@@ -227,7 +231,7 @@ public class Window_Graph : MonoBehaviour
         // Anadimos el nuevo punto
         if (objective_points.Count >= points.Count)
         {
-            
+
             //Debug.Log("MAX_O: " + y_max + "  NEW_O:" + new_y);
             //Debug.Log("P: " + points.Count + "  O:" + objective_points.Count);
 
@@ -308,6 +312,11 @@ public class Window_Graph : MonoBehaviour
         objective_line_renderer.SetPositions(aux_def_o);
     }
 
+    public void RefreshChart()
+    {
+        CreateLine();
+    }
+
     // Desplaza la Grafica a la Izquierda 1 posicion
     private void MoveLeft()
     {
@@ -327,7 +336,7 @@ public class Window_Graph : MonoBehaviour
         {
             if (newPoint.y > y_max)
                 y_max = newPoint.y;
-            if(newPoint2.y > y_max)
+            if (newPoint2.y > y_max)
                 y_max = newPoint2.y;
             // Si el escalado en X esta activo se debe reescalar en cada nuevo punto anadido
             ReScalePoints();
@@ -406,22 +415,22 @@ public class Window_Graph : MonoBehaviour
         // Escalado de los eventos del disenador
         for (int i = 0; i < circles.Count; i++)
         {
-            if(i < objective_circles.Count)
+            if (i < objective_circles.Count)
             {
-            RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
-            float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
+                RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
+                float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
 
-            if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
-            {
-                float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
-                Vector2 pos = new Vector2(x_pos, y_pos);
-                rect.anchoredPosition = pos;
-            }
-            else
-            {
-                Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
-                rect.anchoredPosition = pos;
-            }
+                if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
+                {
+                    float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
+                    Vector2 pos = new Vector2(x_pos, y_pos);
+                    rect.anchoredPosition = pos;
+                }
+                else
+                {
+                    Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
+                    rect.anchoredPosition = pos;
+                }
             }
         }
 
@@ -439,7 +448,7 @@ public class Window_Graph : MonoBehaviour
                 label_X_List[i].text = (((float)(circles.Count - 1) / (float)graphConfig.x_segments) * i).ToString("F1");
             }
         }
-        
+
     }
 
     // Inicializa la lista de puntos del Disenador (Llamar desde la persistencia al crear)

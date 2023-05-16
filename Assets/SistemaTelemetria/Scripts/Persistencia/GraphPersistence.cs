@@ -79,6 +79,7 @@ public class GraphPersistence : IPersistence
     float preset_Scale = 1f;
 
     Resolution resolution;
+    Vector2 dimension;
     int max_charts_per_row = 4;
     int max_charts_per_col = 4;
 
@@ -101,11 +102,13 @@ public class GraphPersistence : IPersistence
         canvasObject.GetComponent<Canvas>().scaleFactor = 1f;  //!CUIDAO
 
 
-        // ESTO ESTA SIENDO DELICADO
+        // Resolucion
         CanvasScaler mivieja = canvasObject.GetComponent<CanvasScaler>();
         mivieja.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         resolution = Screen.currentResolution;
         mivieja.referenceResolution = new Vector2(resolution.width, resolution.height);
+        //Tamano
+        dimension = new Vector2(Screen.width, Screen.height);
 
         //Crear tantos Graph como se han configurado y pasarles la informacion
         Array.Resize(ref graphs, graphsConfig.Count());
@@ -127,13 +130,24 @@ public class GraphPersistence : IPersistence
             graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
 
             cuadIndex++;
-            if(cuadIndex >= max_charts_per_row)
+            if (cuadIndex >= max_charts_per_row)
                 cuadIndex = 0;
         }
     }
 
     private void Update()
     {
+        //Debug.Log("Height: " + Screen.height + " Width: " + Screen.width);
+        if (dimension.x != Screen.height || dimension.y != Screen.width)
+        {
+            Debug.Log("Cambio tamano pantalla");
+            dimension = new Vector2(Screen.width, Screen.height);
+            for (int i = 0; i < graphsConfig.Count(); ++i)
+            {
+                graphs[i].RefreshChart();
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
             transform.GetChild(0).transform.gameObject.SetActive(!transform.GetChild(0).transform.gameObject.activeSelf);
     }
@@ -163,11 +177,11 @@ public class GraphPersistence : IPersistence
 
     public override void Flush()
     {
-        
+
     }
 
     // Ajusta la posicion y escala de la Grafica
-    private void SetGraphInWindow( ref GameObject chart, int index, int cuadIndex)
+    private void SetGraphInWindow(ref GameObject chart, int index, int cuadIndex)
     {
         RectTransform rectChart = chart.GetComponent<RectTransform>();
         rectChart.localScale = new Vector3(preset_Scale / max_charts_per_row, preset_Scale / max_charts_per_row, preset_Scale / max_charts_per_row);
@@ -193,7 +207,7 @@ public class GraphPersistence : IPersistence
                 offsetX = (resolution.width / max_charts_per_row) * cuadIndex;
                 row = index / max_charts_per_row;
                 // este 1080 hay que sacarlo a una variable porque el height del graph no es exacto y no da pa las cuentas
-                offsetY = resolution.height - ((row+1) * (1080 / max_charts_per_row)); // el height es el original por eso hay que reescalarlo para abajo
+                offsetY = resolution.height - ((row + 1) * (1080 / max_charts_per_row)); // el height es el original por eso hay que reescalarlo para abajo
                 rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
                 break;
 
@@ -261,7 +275,7 @@ public class GraphPersistenceEditor : Editor
             actGraphConf.name = EditorGUILayout.TextField("GraphName", actGraphConf.name);
 
             actGraphConf.pointsNumber = EditorGUILayout.IntField("NumberPoints", actGraphConf.pointsNumber);
-            if (actGraphConf.pointsNumber < 1) 
+            if (actGraphConf.pointsNumber < 1)
                 actGraphConf.pointsNumber = 1;
 
             actGraphConf.myCurve = EditorGUILayout.CurveField(actGraphConf.myCurve);
@@ -283,14 +297,18 @@ public class GraphPersistenceEditor : Editor
 
 
             //El resto de configuracion
-            actGraphConf.line_Width = EditorGUILayout.Slider("Line Width", actGraphConf.line_Width,0.0f,0.2f);
+            actGraphConf.line_Width = EditorGUILayout.Slider("Line Width", actGraphConf.line_Width, 0.0f, 0.2f);
             actGraphConf.point_Size = EditorGUILayout.Slider("Point Size", actGraphConf.point_Size, 0.0f, 1.0f);
 
             if (graphPersistence.constrainsGraphs == Constrains.FREE_CONFIG)
             {
                 actGraphConf.graph_X = EditorGUILayout.IntField("X Pos", actGraphConf.graph_X);
                 actGraphConf.graph_Y = EditorGUILayout.IntField("Y Pos", actGraphConf.graph_Y);
-                actGraphConf.scale = EditorGUILayout.FloatField("Scale", actGraphConf.scale);
+                float auxScale = EditorGUILayout.FloatField("Scale", actGraphConf.scale);
+                if (actGraphConf.scale != auxScale)
+                {
+                    actGraphConf.scale = auxScale;
+                }
             }
 
             actGraphConf.x_segments = EditorGUILayout.IntField("X segments", actGraphConf.x_segments);
