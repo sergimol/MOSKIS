@@ -16,7 +16,6 @@ public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
 public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
 public enum Constrains { FREE_CONFIG, LEFT_TOP, LEFT_BOTTOM, LEFT_VERTICAL, RIGHT_VERTICAL }
 
-
 [Serializable]
 public struct GraphConfig
 {
@@ -277,6 +276,8 @@ public class GraphPersistenceEditor : Editor
         {
             GraphConfig actGraphConf = graphPersistence.graphsConfig[i];
             actGraphConf.name = EditorGUILayout.TextField("GraphName", actGraphConf.name);
+            if (actGraphConf.name == "" || (i-1 >=0 && actGraphConf.name == graphPersistence.graphsConfig[i-1].name))
+                actGraphConf.name = "Char" + i;
 
             actGraphConf.pointsNumber = EditorGUILayout.IntField("NumberPoints", actGraphConf.pointsNumber);
             if (actGraphConf.pointsNumber < 1)
@@ -301,22 +302,22 @@ public class GraphPersistenceEditor : Editor
 
 
             //El resto de configuracion
-            actGraphConf.line_Width = EditorGUILayout.Slider("Line Width", actGraphConf.line_Width, 0.0f, 0.2f);
-            actGraphConf.point_Size = EditorGUILayout.Slider("Point Size", actGraphConf.point_Size, 0.0f, 1.0f);
+            actGraphConf.line_Width = EditorGUILayout.Slider("Line Width", actGraphConf.line_Width, 0.01f, 0.2f);
+            actGraphConf.point_Size = EditorGUILayout.Slider("Point Size", actGraphConf.point_Size, 0.01f, 1.0f);
 
             if (graphPersistence.constrainsGraphs == Constrains.FREE_CONFIG)
             {
                 actGraphConf.graph_X = EditorGUILayout.IntField("X Pos", actGraphConf.graph_X);
                 actGraphConf.graph_Y = EditorGUILayout.IntField("Y Pos", actGraphConf.graph_Y);
-                float auxScale = EditorGUILayout.FloatField("Scale", actGraphConf.scale);
-                if (actGraphConf.scale != auxScale)
-                {
-                    actGraphConf.scale = auxScale;
-                }
+                actGraphConf.scale = EditorGUILayout.Slider("Scale", actGraphConf.scale, 0.01f, 1.0f);
             }
 
             actGraphConf.x_segments = EditorGUILayout.IntField("X segments", actGraphConf.x_segments);
+            if (actGraphConf.x_segments < 2)
+                actGraphConf.x_segments = 2;
             actGraphConf.y_segments = EditorGUILayout.IntField("Y segments", actGraphConf.y_segments);
+            if (actGraphConf.y_segments < 2)
+                actGraphConf.y_segments = 2;
 
             EditorGUILayout.Space(20);
             graphPersistence.graphsConfig[i] = actGraphConf;
