@@ -136,19 +136,15 @@ public class GraphPersistence : IPersistence
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        //Debug.Log("Height: " + Screen.height + " Width: " + Screen.width);
-        if (dimension.x != Screen.height || dimension.y != Screen.width)
+        // En cada update se reescriben las lineas del chart porque se pintan sobre el espacio del juego
+        for (int i = 0; i < graphsConfig.Count(); ++i)
         {
-            Debug.Log("Cambio tamano pantalla");
-            dimension = new Vector2(Screen.width, Screen.height);
-            for (int i = 0; i < graphsConfig.Count(); ++i)
-            {
-                graphs[i].RefreshChart();
-            }
+            graphs[i].RefreshChart();
         }
 
+        // Con la tecla Q se desactivan todos los charts
         if (Input.GetKeyDown(KeyCode.Q))
             transform.GetChild(0).transform.gameObject.SetActive(!transform.GetChild(0).transform.gameObject.activeSelf);
     }
