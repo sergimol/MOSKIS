@@ -120,6 +120,11 @@ public class Window_Graph : MonoBehaviour
 
         ShowGraph();
 
+        line_renderer.startWidth = graphConfig.line_Width;
+        line_renderer.endWidth = graphConfig.line_Width;
+        objective_line_renderer.startWidth = graphConfig.line_Width;
+        objective_line_renderer.endWidth = graphConfig.line_Width;
+
 
         // Obtener el tama�o de la resoluci�n actual de la pantalla
         Resolution resolution = Screen.currentResolution;
@@ -128,6 +133,8 @@ public class Window_Graph : MonoBehaviour
         // Obtener el tama�o de la ventana de juego
         int windowWidth = Screen.width;
         int windowHeight = Screen.height;
+
+        circle_scale *= graphConfig.point_Size;
 
 
 

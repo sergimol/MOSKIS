@@ -53,6 +53,12 @@ public struct GraphConfig
     [HideInInspector]
     public Scaling scaling;
     [HideInInspector]
+    [Range(0.0f, 0.2f)]
+    public float line_Width;
+    [HideInInspector]
+    [Range(0.0f, 1.0f)]
+    public float point_Size;
+    [HideInInspector]
     public GraphTypes graphType;
 }
 
@@ -275,19 +281,20 @@ public class GraphPersistenceEditor : Editor
             if (selectedEventIndex != -1 && actGraphConf.eventY != eventNames[selectedEventIndex])
                 actGraphConf.eventY = eventNames[selectedEventIndex];
 
+
             //El resto de configuracion
-            //actGraphConf.graph_Height = EditorGUILayout.FloatField("Graph_Height", actGraphConf.graph_Height);
-            //actGraphConf.graph_Width = EditorGUILayout.FloatField("Graph_Width", actGraphConf.graph_Width);
+            actGraphConf.line_Width = EditorGUILayout.Slider("Line Width", actGraphConf.line_Width,0.0f,0.2f);
+            actGraphConf.point_Size = EditorGUILayout.Slider("Point Size", actGraphConf.point_Size, 0.0f, 1.0f);
 
             if (graphPersistence.constrainsGraphs == Constrains.FREE_CONFIG)
             {
-                actGraphConf.graph_X = EditorGUILayout.IntField("X_Pos", actGraphConf.graph_X);
-                actGraphConf.graph_Y = EditorGUILayout.IntField("Y_Pos", actGraphConf.graph_Y);
+                actGraphConf.graph_X = EditorGUILayout.IntField("X Pos", actGraphConf.graph_X);
+                actGraphConf.graph_Y = EditorGUILayout.IntField("Y Pos", actGraphConf.graph_Y);
                 actGraphConf.scale = EditorGUILayout.FloatField("Scale", actGraphConf.scale);
             }
 
-            actGraphConf.x_segments = EditorGUILayout.IntField("X_segments", actGraphConf.x_segments);
-            actGraphConf.y_segments = EditorGUILayout.IntField("Y_segments", actGraphConf.y_segments);
+            actGraphConf.x_segments = EditorGUILayout.IntField("X segments", actGraphConf.x_segments);
+            actGraphConf.y_segments = EditorGUILayout.IntField("Y segments", actGraphConf.y_segments);
 
             EditorGUILayout.Space(20);
             graphPersistence.graphsConfig[i] = actGraphConf;
