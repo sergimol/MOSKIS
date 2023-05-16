@@ -166,7 +166,7 @@ public class Window_Graph : MonoBehaviour
 
             RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
             labelX.anchoredPosition = new Vector2(x, 0);
-            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
+            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString("F1");
             label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
 
             x += x_size;
@@ -182,7 +182,7 @@ public class Window_Graph : MonoBehaviour
 
             RectTransform labelY = Instantiate(label_template_Y, label_Y_container.transform);
             labelY.anchoredPosition = new Vector2(0, y);
-            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / graphConfig.y_segments) * i).ToString();
+            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / graphConfig.y_segments) * i).ToString("F1");
 
             y += y_size;
 
@@ -318,7 +318,7 @@ public class Window_Graph : MonoBehaviour
         // Añadimos el nuevo marcador abajo
         RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
         labelX.anchoredPosition = new Vector2(x_pos, 0);
-        labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString();
+        labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString("F1");
         label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
     }
 
@@ -405,14 +405,16 @@ public class Window_Graph : MonoBehaviour
         }
 
         // Escalado de los eventos del diseñador
-        for (int i = 0; i < objective_circles.Count; i++)
+        for (int i = 0; i < circles.Count; i++)
         {
+            if(i < objective_circles.Count)
+            {
             RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
             float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
 
             if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
-                float x_pos = ((float)i / (objective_circles.Count - 1)) * graphConfig.graph_Width;
+                float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
                 Vector2 pos = new Vector2(x_pos, y_pos);
                 rect.anchoredPosition = pos;
             }
@@ -420,6 +422,7 @@ public class Window_Graph : MonoBehaviour
             {
                 Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
                 rect.anchoredPosition = pos;
+            }
             }
         }
 
