@@ -47,7 +47,15 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform dash_template_Y;
 
-    
+    // Leyenda
+    [SerializeField]
+    Image obj_image;
+    [SerializeField]
+    Image track_image;
+    [SerializeField]
+    TextMeshProUGUI chart_name;
+
+
 
     float x_size; // distancia entre puntos de X
     float y_size; // distancia entre puntos de Y
@@ -137,6 +145,14 @@ public class Window_Graph : MonoBehaviour
         circle_scale *= graphConfig.point_Size;
 
 
+        // Nombre y Leyenda
+        List<Material> m = new List<Material>();
+        line_renderer.GetMaterials(m);
+        obj_image.color = m[0].color;
+        List<Material> m2 = new List<Material>();
+        objective_line_renderer.GetMaterials(m2);
+        track_image.color = m2[0].color;
+        chart_name.text = g.name;
 
     }
 

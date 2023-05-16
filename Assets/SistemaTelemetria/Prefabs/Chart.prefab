@@ -1024,7 +1024,7 @@ GameObject:
   - component: {fileID: 6347305303955201735}
   - component: {fileID: 6347305303955201734}
   m_Layer: 5
-  m_Name: PiciaGorda5
+  m_Name: Chart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1080,6 +1080,9 @@ MonoBehaviour:
   label_template_Y: {fileID: 8789352861180054070, guid: bb272ea1ff4672845903dadc8854362a, type: 3}
   dash_template_X: {fileID: 6333979581059549825, guid: 909b3cf463a3ea54bb352679c0c7f67c, type: 3}
   dash_template_Y: {fileID: 1928189597557539403, guid: 7d7f678734513cb43a0a47c9076c8f43, type: 3}
+  obj_image: {fileID: 4026550473904779769}
+  track_image: {fileID: 7139703232767468917}
+  chart_name: {fileID: 1226492251476312244}
   render_viewport: {fileID: 6347305303730149268}
 --- !u!1 &7177758330237890739
 GameObject:
