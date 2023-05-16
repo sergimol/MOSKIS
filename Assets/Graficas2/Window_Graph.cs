@@ -17,7 +17,7 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     LineRenderer line_renderer;
 
-    // Puntos del dise�ador
+    // Puntos del disenador
     //List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
     List<float> objective_points;
     [SerializeField]
@@ -47,15 +47,23 @@ public class Window_Graph : MonoBehaviour
     [SerializeField]
     RectTransform dash_template_Y;
 
-    
+    // Leyenda
+    [SerializeField]
+    Image obj_image;
+    [SerializeField]
+    Image track_image;
+    [SerializeField]
+    TextMeshProUGUI chart_name;
+
+
 
     float x_size; // distancia entre puntos de X
     float y_size; // distancia entre puntos de Y
     float x_pos = 0;
 
-    // Configuraci�n del gr�fico
+    // Configuracion del grafico
     GraphConfig graphConfig;
-    /*ESTO EST� DENTRO DE GRAPHCONFIG
+    /*ESTO ESTA DENTRO DE GRAPHCONFIG
     // Dimensiones del Grafico
     //public float graph_Height;
     //public float graph_Width;
@@ -70,9 +78,9 @@ public class Window_Graph : MonoBehaviour
     */
 
     float x_max; // Valor maximo que tiene el Eje X en cada momento
-                 // Cada vez que se a�ade un punto se suma
+                 // Cada vez que se anade un punto se suma
     float y_max; // Valor maximo que puede alcanzar el Eje Y 
-                 // Inicialmente lo determina el mayor valor de la grafica del dise�ador
+                 // Inicialmente lo determina el mayor valor de la grafica del disenador
                  // Posteriormente se actualiza si aparecen valores mayores
     
     // Contador para colocar el siguiente punto generado por eventos
@@ -126,17 +134,25 @@ public class Window_Graph : MonoBehaviour
         objective_line_renderer.endWidth = graphConfig.line_Width;
 
 
-        // Obtener el tama�o de la resoluci�n actual de la pantalla
+        // Obtener el tamano de la resolucion actual de la pantalla
         Resolution resolution = Screen.currentResolution;
 
 
-        // Obtener el tama�o de la ventana de juego
+        // Obtener el tamano de la ventana de juego
         int windowWidth = Screen.width;
         int windowHeight = Screen.height;
 
         circle_scale *= graphConfig.point_Size;
 
 
+        // Nombre y Leyenda
+        List<Material> m = new List<Material>();
+        line_renderer.GetMaterials(m);
+        obj_image.color = m[0].color;
+        List<Material> m2 = new List<Material>();
+        objective_line_renderer.GetMaterials(m2);
+        track_image.color = m2[0].color;
+        chart_name.text = g.name;
 
     }
 
@@ -186,14 +202,14 @@ public class Window_Graph : MonoBehaviour
             label_Y_List[i] = labelY.GetComponent<TextMeshProUGUI>();
         }
 
-        // Leyenda //
+        //// Leyenda //
         //RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
         //dash_obj.anchoredPosition = new Vector2(0, -16);
         //dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
 
         //RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
         //legend_obj.anchoredPosition = new Vector2(83, 0);
-        //legend_obj.GetComponent<TextMeshProUGUI>().text = "Curva Dise�ada";
+        //legend_obj.GetComponent<TextMeshProUGUI>().text = "Objetive";
         //legend_obj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
 
@@ -203,16 +219,17 @@ public class Window_Graph : MonoBehaviour
 
         //RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
         //legend_player.anchoredPosition = new Vector2(82, 0);
-        //legend_player.GetComponent<TextMeshProUGUI>().text = "Curva Obtenida";
+        //legend_player.GetComponent<TextMeshProUGUI>().text = "Tracking";
         //legend_player.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
     }
 
-    // A�ade un nuevo punto a la grafica
+    // Anade un nuevo punto a la grafica
     public void AddPoint(float new_y)
     {
+
         /// PUNTO TELEMETRIA
-        // A�adimos el nuevo punto
+        // Anadimos el nuevo punto
         points.Add(new_y);
         //Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
 
@@ -223,7 +240,7 @@ public class Window_Graph : MonoBehaviour
 
 
         /// PUNTO OBJETIVO
-        // A�adimos el nuevo punto
+        // Anadimos el nuevo punto
         if (objective_points.Count >= points.Count)
         {
             
@@ -234,7 +251,6 @@ public class Window_Graph : MonoBehaviour
             float o_y_pos = (objective_points[objective_index] / y_max) * graphConfig.graph_Height;
             GameObject o_point_object = CreateCircle(new Vector2(x_pos, o_y_pos));
             objective_circles.Add(o_point_object);
-            objective_index++;
         }
 
         // Se hace el check de los dos puntos a la vez para evitar reescalar dos veces
@@ -242,6 +258,8 @@ public class Window_Graph : MonoBehaviour
 
         x_pos += x_size;
 
+        if (objective_points.Count >= points.Count)
+            objective_index++;
 
         // Lo unimos a la grafica
         CreateLine();
@@ -312,7 +330,7 @@ public class Window_Graph : MonoBehaviour
         // Movemos el container
         left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x - x_size, left_container.anchoredPosition.y);
 
-        // A�adimos el nuevo marcador abajo
+        // Anadimos el nuevo marcador abajo
         RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
         labelX.anchoredPosition = new Vector2(x_pos, 0);
         labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString("F1");
@@ -327,7 +345,7 @@ public class Window_Graph : MonoBehaviour
                 y_max = newPoint.y;
             if(newPoint2.y > y_max)
                 y_max = newPoint2.y;
-            // Si el escalado en X est� activo se debe reescalar en cada nuevo punto a�adido
+            // Si el escalado en X esta activo se debe reescalar en cada nuevo punto anadido
             ReScalePoints();
         }
         else
@@ -335,23 +353,23 @@ public class Window_Graph : MonoBehaviour
             // Si el nuevo punto es mayor que el maximo que habia, ReEscalamos
             if (newPoint.y > y_max || newPoint2.y > y_max)
             {
-                // y_max se quedar� con la � m�s grande de entre los dos puntos si hay al menos uno que supera la y_max anterior
+                // y_max se quedara con la y mas grande de entre los dos puntos si hay al menos uno que supera la y_max anterior
                 y_max = newPoint.y > newPoint2.y ? newPoint.y : newPoint2.y;
                 ReScalePoints();
             }
 
-            // Si A�adimos un nuevo punto y hay que desplazar la Grafica
+            // Si Anadimos un nuevo punto y hay que desplazar la Grafica
             if (newPoint.x > x_max || newPoint2.x > x_max)
             {
-                // x_max ser� el m�s grande de los dos puntos
-                // Normalmente ir�n a la vez
+                // x_max sera el mas grande de los dos puntos
+                // Normalmente iran a la vez
                 x_max = newPoint.x > newPoint2.x ? newPoint.x : newPoint2.x;
                 MoveLeft();
             }
         }
     }
 
-    // Crea un circulo, p�ra representar graficamente un punto
+    // Crea un circulo, para representar graficamente un punto
     GameObject CreateCircle(Vector2 pos)
     {
         // Creamos una Imagen
@@ -386,8 +404,8 @@ public class Window_Graph : MonoBehaviour
             RectTransform rect = circles[i].GetComponent<RectTransform>();
             float y_pos = (points[i] / y_max) * graphConfig.graph_Height;
 
-            // Si est� activo el escalado en x el nuevo vector deber� calcular la nueva posici�n en X tambi�n
-            // Si est� activo el escalado con offset, se espera hasta llegar a los segmentos de X
+            // Si esta activo el escalado en x el nuevo vector debera calcular la nueva posicion en X tambien
+            // Si esta activo el escalado con offset, se espera hasta llegar a los segmentos de X
             if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
                 float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
@@ -401,7 +419,7 @@ public class Window_Graph : MonoBehaviour
             }
         }
 
-        // Escalado de los eventos del dise�ador
+        // Escalado de los eventos del disenador
         for (int i = 0; i < circles.Count; i++)
         {
             if(i < objective_circles.Count)
@@ -431,7 +449,7 @@ public class Window_Graph : MonoBehaviour
 
         if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
         {
-            // Reescalado de los puntos en X que se actualiza cuando se a�aden
+            // Reescalado de los puntos en X que se actualiza cuando se anaden
             for (int i = 0; i < label_X_List.Count; i++)
             {
                 label_X_List[i].text = (((float)(circles.Count - 1) / (float)graphConfig.x_segments) * i).ToString("F1");
@@ -440,21 +458,20 @@ public class Window_Graph : MonoBehaviour
         
     }
 
-    // Inicializa la lista de puntos del Dise�ador (Llamar desde la persistencia al crear)
-    // He puesto que pasais una lista, si pasais un vector pos lo cambiais jeje
+    // Inicializa la lista de puntos del Disenador (Llamar desde la persistencia al crear)
     public void SetObjectiveLine(List<float> o)
     {
         objective_points = new List<float>(o);
     }
 
-    // Recibe un evento desde el sistema de persistencia y lo procesa si es necesario. Devuelve true solo si escribe un nuevo punto en la gr�fica
+    // Recibe un evento desde el sistema de persistencia y lo procesa si es necesario. Devuelve true solo si escribe un nuevo punto en la grafica
     public bool ReceiveEvent(TrackerEvent e)
     {
         string eventType = e.GetEventType();
         // Si el tipo del evento es igual que el del eje Y aumenta el contador que coloca el siguiente punto en Y
         if (eventType == graphConfig.eventY)
             nextY++;
-        // Si el tipo del evento es igual que el del eje X coloca el siguiente punto teniendo en cuenta el tipo de gr�fica
+        // Si el tipo del evento es igual que el del eje X coloca el siguiente punto teniendo en cuenta el tipo de grafica
         else if (eventType == graphConfig.eventX)
         {
             ProcessXEvent();
