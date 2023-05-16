@@ -64,7 +64,6 @@ public class GraphPersistence : IPersistence
     private Dictionary<string, StreamWriter> graphWriters;
 
     float preset_Scale = 1f;
-    Vector2 pos_Offset = new Vector2(100, 100);
 
     private void Start()
     {
@@ -96,12 +95,13 @@ public class GraphPersistence : IPersistence
         Array.Resize(ref graphs, graphsConfig.Count());
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
+            // Creamos el objeto grafica
             GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
-            //aux.GetComponent<RectTransform>().offsetMax = new Vector2(graphsConfig[i].graph_X, graphsConfig[i].graph_Y);
+
             // Rescalamos y posicionamos 
             aux.GetComponent<RectTransform>().localScale = new Vector3(preset_Scale / graphsConfig.Count(), preset_Scale / graphsConfig.Count(), preset_Scale);
             float offset = (res.width / graphsConfig.Count()) * i;
-            aux.GetComponent<RectTransform>().anchoredPosition = new Vector2(pos_Offset.x + offset,  pos_Offset.y + graphsConfig[i].graph_Y);
+            aux.GetComponent<RectTransform>().anchoredPosition = new Vector2(offset,  graphsConfig[i].graph_Y);
 
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
