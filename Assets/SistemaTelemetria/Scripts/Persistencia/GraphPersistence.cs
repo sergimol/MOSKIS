@@ -162,7 +162,9 @@ public class GraphPersistenceEditor : Editor
             eventNames.Add(config.eventName);
         }
 
+        //Método de checkeo de cambios en el editor
         EditorGUI.BeginChangeCheck();
+
         // Crea un menú dropdown para cada elemento de graphs
         for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
@@ -200,6 +202,7 @@ public class GraphPersistenceEditor : Editor
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
 
+        //Si ha habido cambios utilizamos setDirty para que unity no cambie los valores de editor y se mantengan para ejecucion
         if (EditorGUI.EndChangeCheck())        
             EditorUtility.SetDirty(target);
         
