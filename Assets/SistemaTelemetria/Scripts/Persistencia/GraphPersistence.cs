@@ -227,6 +227,7 @@ public class GraphPersistenceEditor : Editor
             actGraphConf.y_segments = EditorGUILayout.IntField("Y_segments", actGraphConf.y_segments);
 
             EditorGUILayout.Space(20);
+            graphPersistence.graphsConfig[i] = actGraphConf;
         }
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
