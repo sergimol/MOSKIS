@@ -18,12 +18,12 @@ public class ActGraphsInInspector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Recorrido de todas las gráficas del editor
+        //Recorrido de todas las graficas del editor
         for(int i = 0; i<grpP.graphsConfig.Length; i++)     
         {
             AnimationCurve anC = grpP.graphsConfig[i].myCurve;
 
-            //Si no hay ningún segmento en x se añade un punto inicial a la gráfica
+            //Si no hay ningun segmento en x se anade un punto inicial a la grafica
             if (grpP.graphsConfig[i].pointsNumber == 0)
             {
                 Keyframe k = new Keyframe(0, 0);
@@ -33,7 +33,7 @@ public class ActGraphsInInspector : MonoBehaviour
             }
             else
             {
-                //Actualización de todos los puntos de la gráfica
+                //Actualizacion de todos los puntos de la grafica
                 for (int j = 0; j < grpP.graphsConfig[i].pointsNumber; j++)
                 {
                     if ((j - 1 >= 0 && anC.keys[j - 1].time == j) || (j + 1 < anC.keys.Length && anC.keys[j + 1].time == j))
@@ -45,7 +45,7 @@ public class ActGraphsInInspector : MonoBehaviour
                         y = (int)Math.Round(anC.keys[j].value, 0);
                         anC.RemoveKey(j);
                     }
-                    //Añadimos nuevo punto con las tangentes en Linear y el valor de y = anterior o = x
+                    //Anadimos nuevo punto con las tangentes en Linear y el valor de y = anterior o = x
                     Keyframe k = new Keyframe(j, y);
                     anC.AddKey(k);
                     AnimationUtility.SetKeyRightTangentMode(anC, j, TangentMode.Linear);

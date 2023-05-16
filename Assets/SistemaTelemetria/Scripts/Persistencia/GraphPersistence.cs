@@ -86,15 +86,15 @@ public class GraphPersistence : IPersistence
     {
         graphWriters = new Dictionary<string, StreamWriter>();
 
-        // Crear la carpeta donde se guuardar�n los archivos que contienen los datos con los puntos de la gr�fica
+        // Crear la carpeta donde se guuardaran los archivos que contienen los datos con los puntos de la grafica
         string id = Tracker.instance.getSessionId().ToString();
         string fullRoute = baseSaveRoute + id + "\\";
         Directory.CreateDirectory(fullRoute);
 
         // Crear un nuevo objeto Canvas
         GameObject canvasObject = new GameObject("Canvas");
-        canvasObject.AddComponent<CanvasScaler>();              // Agregar el componente gr�fico CanvasScaler al objeto Canvas
-        canvasObject.AddComponent<GraphicRaycaster>();          // Agregar el componente gr�fico GraphicRaycaster al objeto Canvas
+        canvasObject.AddComponent<CanvasScaler>();              // Agregar el componente grafico CanvasScaler al objeto Canvas
+        canvasObject.AddComponent<GraphicRaycaster>();          // Agregar el componente grafico GraphicRaycaster al objeto Canvas
         canvasObject.transform.SetParent(transform, false);     // Hacer que el objeto Canvas sea hijo del objeto padre
         canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         canvasObject.GetComponent<Canvas>().worldCamera = Camera.main;
@@ -107,7 +107,7 @@ public class GraphPersistence : IPersistence
         resolution = Screen.currentResolution;
         mivieja.referenceResolution = new Vector2(resolution.width, resolution.height);
 
-        //Crear tantos Graph como se han configurado y pasarles la informaci�n
+        //Crear tantos Graph como se han configurado y pasarles la informacion
         Array.Resize(ref graphs, graphsConfig.Count());
         int rowIndex = 0;
         int colIndex = 0;
@@ -123,7 +123,7 @@ public class GraphPersistence : IPersistence
             graphs[i].name = graphsConfig[i].name;
             graphs[i].SetConfig(graphsConfig[i]);
 
-            // Crear el archivo en el que se guardar�n los puntos en formato de texto
+            // Crear el archivo en el que se guardaran los puntos en formato de texto
             graphWriters.Add(graphsConfig[i].name, new StreamWriter(fullRoute + graphsConfig[i].name + ".csv"));
             graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
 
@@ -154,12 +154,12 @@ public class GraphPersistence : IPersistence
         //eventsBuff.Add(e);
         for (int i = 0; i < graphs.Length; ++i)
         {
-            // Comprueba si la gr�fica tiene el evento y si debe mostrar un nuevo punto
+            // Comprueba si la grafica tiene el evento y si debe mostrar un nuevo punto
             if (graphs[i].ReceiveEvent(e))
             {
                 // Si muestra un nuevo punto lo escribe en archivo para guardarlo
                 Vector2 pos = graphs[i].getLatestPoint();
-                // Formato: X (de los dos puntos), Y (del punto de la gr�fica del jugador), Y (del punto de la grafica del dise�ador)
+                // Formato: X (de los dos puntos), Y (del punto de la grafica del jugador), Y (del punto de la grafica del disenador)
                 graphWriters[graphs[i].name].WriteLine(pos.x + "," + pos.y + "," + graphs[i].getLatestObjectivePoint());
             }
         }
@@ -241,7 +241,7 @@ public class GraphPersistenceEditor : Editor
 
         GraphPersistence graphPersistence = (GraphPersistence)target;
 
-        //Obt�n los nombres de los eventos del script TrackerConfig
+        //Obten los nombres de los eventos del script TrackerConfig
         TrackerConfig trackerConfig = graphPersistence.gameObject.GetComponent<TrackerConfig>();
         List<string> eventNames = new List<string>();
         foreach (TrackerConfig.EventConfig config in trackerConfig.eventConfig)
@@ -249,13 +249,13 @@ public class GraphPersistenceEditor : Editor
             eventNames.Add(config.eventName);
         }
 
-        //M�todo de checkeo de cambios en el editor
+        //Metodo de checkeo de cambios en el editor
         EditorGUI.BeginChangeCheck();
 
         graphPersistence.constrainsGraphs = (Constrains)EditorGUILayout.EnumPopup("Constrains", graphPersistence.constrainsGraphs);
         EditorGUILayout.Space(10);
 
-        // Crea un men� dropdown para cada elemento de graphs
+        // Crea un menu dropdown para cada elemento de graphs
         for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
             GraphConfig actGraphConf = graphPersistence.graphsConfig[i];
@@ -272,7 +272,7 @@ public class GraphPersistenceEditor : Editor
             actGraphConf.graphType = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", actGraphConf.graphType);
             actGraphConf.scaling = (Scaling)EditorGUILayout.EnumPopup("Scaling", actGraphConf.scaling);
 
-            // Crea un men� popup con los nombres de los eventos
+            // Crea un menu popup con los nombres de los eventos
             int selectedEventIndex;
             selectedEventIndex = EditorGUILayout.Popup("Select Event X", eventNames.IndexOf(actGraphConf.eventX), eventNames.ToArray());
             if (selectedEventIndex != -1 && actGraphConf.eventX != eventNames[selectedEventIndex])

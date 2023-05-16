@@ -17,7 +17,7 @@ public class Picia : MonoBehaviour
     [SerializeField]
     LineRenderer line_renderer;
 
-    // Puntos del diseñador
+    // Puntos del disenador
     //List<float> objetive_points = new List<float> { 10f, 30f, 0f, 12f, 12.5f, 6f, 2f };
     public List<float> objetive_points;
     [SerializeField]
@@ -66,9 +66,9 @@ public class Picia : MonoBehaviour
 
 
     float x_max; // Valor maximo que tiene el Eje X en cada momento
-                 // Cada vez que se añade un punto se suma
+                 // Cada vez que se anade un punto se suma
     float y_max; // Valor maximo que puede alcanzar el Eje Y 
-                 // Inicialmente lo determina el mayor valor de la grafica del diseñador
+                 // Inicialmente lo determina el mayor valor de la grafica del disenador
                  // Posteriormente se actualiza si aparecen valores mayores
 
     int acostada = 1;
@@ -165,11 +165,11 @@ public class Picia : MonoBehaviour
 
     }
 
-    // Añade un nuevo punto a la grafica
+    // Anade un nuevo punto a la grafica
     public void AddPoint(float new_y)
     {
         /// PUNTO TELEMETRIA
-        // Añadimos el nuevo punto
+        // Anadimos el nuevo punto
         points.Add(new_y);
         CheckMove(new Vector2(points.Count - 1, new_y));
         Debug.Log("MAX: " + y_max + "  NEW:" + new_y);
@@ -181,7 +181,7 @@ public class Picia : MonoBehaviour
 
 
         /// PUNTO OBJETIVO
-        // Añadimos el nuevo punto
+        // Anadimos el nuevo punto
         if (objetive_points.Count >= points.Count)
         {
             CheckMove(new Vector2(objective_index, new_y));
@@ -267,7 +267,7 @@ public class Picia : MonoBehaviour
         // Movemos el container
         left_container.anchoredPosition = new Vector2(left_container.anchoredPosition.x - x_size, left_container.anchoredPosition.y);
 
-        // Añadimos el nuevo marcador abajo
+        // Anadimos el nuevo marcador abajo
         RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
         labelX.anchoredPosition = new Vector2(x_pos, 0);
         labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString();
@@ -283,7 +283,7 @@ public class Picia : MonoBehaviour
             ReScalePoints();
         }
 
-        // Si Añadimos un nuevo punto y hay que desplazar la Grafica
+        // Si Anadimos un nuevo punto y hay que desplazar la Grafica
         if (newPoint.x > x_max)
         {
             MoveLeft();
@@ -291,7 +291,7 @@ public class Picia : MonoBehaviour
         }
     }
 
-    // Crea un circulo, pàra representar graficamente un punto
+    // Crea un circulo, para representar graficamente un punto
     GameObject CreateCircle(Vector2 pos)
     {
         // Creamos una Imagen
@@ -341,7 +341,7 @@ public class Picia : MonoBehaviour
         }
     }
 
-    // Inicializa la lista de puntos del Diseñador (Llamar desde la persistencia al crear)
+    // Inicializa la lista de puntos del Disenador (Llamar desde la persistencia al crear)
     // He puesto que pasais una lista, si pasais un vector pos lo cambiais jeje
     public void SetObjetiveLine(List<float> o)
     {
