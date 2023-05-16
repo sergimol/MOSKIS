@@ -29,6 +29,8 @@ public struct GraphConfig
     [HideInInspector]
     public string eventY;
     [HideInInspector]
+    public int pointsNumber;
+    [HideInInspector]
     public AnimationCurve myCurve;
     [HideInInspector]
     public GameObject window_graph;
@@ -56,8 +58,6 @@ public struct GraphConfig
 
 public class GraphPersistence : IPersistence
 {
-    List<TrackerEvent> eventsBuff;
-
     public GameObject graphObject;
 
     public Constrains constrainsGraphs;
@@ -78,7 +78,6 @@ public class GraphPersistence : IPersistence
 
     private void Start()
     {
-        eventsBuff = new();
         graphWriters = new Dictionary<string, StreamWriter>();
 
         // Crear la carpeta donde se guuardar�n los archivos que contienen los datos con los puntos de la gr�fica
@@ -125,8 +124,6 @@ public class GraphPersistence : IPersistence
             if(cuadIndex >= max_charts_per_row)
                 cuadIndex = 0;
         }
-
-
     }
 
     private void Update()
@@ -152,7 +149,7 @@ public class GraphPersistence : IPersistence
             {
                 // Si muestra un nuevo punto lo escribe en archivo para guardarlo
                 Vector2 pos = graphs[i].getLatestPoint();
-                // Formato: X (de los dos puntos), Y (del punto de la gr�fica del jugador), Y (del punto de la gr�fica del dise�ador)
+                // Formato: X (de los dos puntos), Y (del punto de la gr�fica del jugador), Y (del punto de la grafica del dise�ador)
                 graphWriters[graphs[i].name].WriteLine(pos.x + "," + pos.y + "," + graphs[i].getLatestObjectivePoint());
             }
         }
@@ -160,9 +157,7 @@ public class GraphPersistence : IPersistence
 
     public override void Flush()
     {
-        //List<TrackerEvent> events = new List<TrackerEvent>(eventsBuff);
-        //eventsBuff.Clear();
-        //Write(events);
+        
     }
 
     // Ajusta la posicion y escala de la Grafica
@@ -258,6 +253,10 @@ public class GraphPersistenceEditor : Editor
             GraphConfig actGraphConf = graphPersistence.graphsConfig[i];
             actGraphConf.name = EditorGUILayout.TextField("GraphName", actGraphConf.name);
 
+            actGraphConf.pointsNumber = EditorGUILayout.IntField("NumberPoints", actGraphConf.pointsNumber);
+            if (actGraphConf.pointsNumber < 1) 
+                actGraphConf.pointsNumber = 1;
+
             actGraphConf.myCurve = EditorGUILayout.CurveField(actGraphConf.myCurve);
             EditorGUILayout.Space(5);
 
@@ -295,19 +294,11 @@ public class GraphPersistenceEditor : Editor
         EditorGUILayout.Space();
         graphPersistence.graphObject = EditorGUILayout.ObjectField("Graph Object", graphPersistence.graphObject, typeof(GameObject), false) as GameObject;
 
-
-
         //Si ha habido cambios utilizamos setDirty para que unity no cambie los valores de editor y se mantengan para ejecucion
-
         if (EditorGUI.EndChangeCheck())
-
             EditorUtility.SetDirty(target);
 
-
-
         // Guarda los cambios realizados en el editor
-
         serializedObject.ApplyModifiedProperties();
     }
-
 }

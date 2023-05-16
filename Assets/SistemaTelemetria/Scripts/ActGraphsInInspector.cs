@@ -24,7 +24,7 @@ public class ActGraphsInInspector : MonoBehaviour
             AnimationCurve anC = grpP.graphsConfig[i].myCurve;
 
             //Si no hay ningún segmento en x se añade un punto inicial a la gráfica
-            if (grpP.graphsConfig[i].x_segments == 0)
+            if (grpP.graphsConfig[i].pointsNumber == 0)
             {
                 Keyframe k = new Keyframe(0, 0);
                 anC.AddKey(k);
@@ -34,7 +34,7 @@ public class ActGraphsInInspector : MonoBehaviour
             else
             {
                 //Actualización de todos los puntos de la gráfica
-                for (int j = 0; j < grpP.graphsConfig[i].x_segments; j++)
+                for (int j = 0; j < grpP.graphsConfig[i].pointsNumber; j++)
                 {
                     if ((j - 1 >= 0 && anC.keys[j - 1].time == j) || (j + 1 < anC.keys.Length && anC.keys[j + 1].time == j))
                         continue;
@@ -51,8 +51,8 @@ public class ActGraphsInInspector : MonoBehaviour
                     AnimationUtility.SetKeyRightTangentMode(anC, j, TangentMode.Linear);
                     AnimationUtility.SetKeyLeftTangentMode(anC, j, TangentMode.Linear);
                 }
-                //Elimino los puntos que sobran si se ha reducido x_segments
-                while (anC.length > grpP.graphsConfig[i].x_segments)
+                //Elimino los puntos que sobran si se ha reducido pointsNumber
+                while (anC.length > grpP.graphsConfig[i].pointsNumber)
                     anC.RemoveKey(anC.length - 1);
             }
             //Ponemos siempre el wrapmode a clamp
