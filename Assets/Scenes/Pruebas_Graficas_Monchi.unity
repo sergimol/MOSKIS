@@ -451,6 +451,7 @@ MonoBehaviour:
   graphObject: {fileID: 0}
   constrainsGraphs: 0
   graphsConfig: []
+  dimension: {x: 0, y: 0}
 --- !u!4 &272236016
 Transform:
   m_ObjectHideFlags: 0
@@ -639,7 +640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].name
-      value: A
+      value: Char0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[1].name
@@ -679,7 +680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].scale
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[10].name
@@ -851,15 +852,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].graph_X
-      value: 0
+      value: 665
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].graph_Y
-      value: 0
+      value: 230
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].scaling
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[10].eventX
@@ -1163,11 +1164,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].x_segments
-      value: 8
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].y_segments
-      value: 8
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[10].graphType
@@ -1931,7 +1932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].time
-      value: 5.0234985
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].time
@@ -2407,7 +2408,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].value
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[40].time
@@ -2455,11 +2456,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].value
-      value: 5.5361633
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].value
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].value
@@ -3699,23 +3700,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].inSlope
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[4].inSlope
-      value: -3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].inSlope
-      value: 1.5008945
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].inSlope
-      value: -3.6212575
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].inSlope
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[8].inSlope
@@ -4139,7 +4140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[2].outSlope
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[30].inSlope
@@ -4183,7 +4184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[3].outSlope
-      value: -3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[40].inSlope
@@ -4227,15 +4228,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[4].outSlope
-      value: 1.5008945
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[5].outSlope
-      value: -3.6212575
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[6].outSlope
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.data[0].myCurve.m_Curve.Array.data[7].outSlope
@@ -7436,7 +7437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.00018310547, y: -54.26001}
+  m_AnchoredPosition: {x: -0.00012207031, y: -54.26001}
   m_SizeDelta: {x: 1626.7, y: 1125.99}
   m_Pivot: {x: -0.1803328, y: -0.223222}
 --- !u!1 &1472710233230647390
@@ -7986,11 +7987,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6347305303955201735, guid: 2b13dab483c549c49b725dde4f9b6f00, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.008605957
+      value: -0.008666992
       objectReference: {fileID: 0}
     - target: {fileID: 6347305303955201735, guid: 2b13dab483c549c49b725dde4f9b6f00, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.004699707
+      value: 0.004638672
       objectReference: {fileID: 0}
     - target: {fileID: 6347305303955201735, guid: 2b13dab483c549c49b725dde4f9b6f00, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8249,7 +8250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5472147111668620163, guid: 53945143f504f9748bb689d24c40663d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.008605957
+      value: -0.008666992
       objectReference: {fileID: 0}
     - target: {fileID: 5472147111668620163, guid: 53945143f504f9748bb689d24c40663d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8375,7 +8376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6557972538171094157, guid: d7d8b157a5cc0734b9cd18cc3791014f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00018310547
+      value: -0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 6557972538171094157, guid: d7d8b157a5cc0734b9cd18cc3791014f, type: 3}
       propertyPath: m_AnchoredPosition.y

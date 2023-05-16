@@ -76,7 +76,7 @@ public class GraphPersistence : IPersistence
     float preset_Scale = 1f;
 
     Resolution resolution;
-    Vector2 dimension;
+    public Vector2 dimension;
     int max_charts_per_row = 4;
     int max_charts_per_col = 3;
 
@@ -307,8 +307,8 @@ public class GraphPersistenceEditor : Editor
 
             if (graphPersistence.constrainsGraphs == Constrains.FREE_CONFIG)
             {
-                actGraphConf.graph_X = EditorGUILayout.IntField("X Pos", actGraphConf.graph_X);
-                actGraphConf.graph_Y = EditorGUILayout.IntField("Y Pos", actGraphConf.graph_Y);
+                actGraphConf.graph_X = EditorGUILayout.IntSlider("X Pos", actGraphConf.graph_X, 0, Screen.currentResolution.width);
+                actGraphConf.graph_Y = EditorGUILayout.IntSlider("Y Pos", actGraphConf.graph_Y, 0, Screen.currentResolution.height);
                 actGraphConf.scale = EditorGUILayout.Slider("Scale", actGraphConf.scale, 0.01f, 1.0f);
             }
 
