@@ -105,9 +105,9 @@ public class Window_Graph : MonoBehaviour
         label_Y_List = new TextMeshProUGUI[graphConfig.y_segments + 1];
 
         // Altura del grid, altura base 5
-        graphConfig.graph_Height *= graph_container.sizeDelta.y;
+        graphConfig.graph_Height = graph_container.sizeDelta.y;
         // Ancho del grid, anchuira base 5
-        graphConfig.graph_Width *= graph_container.sizeDelta.x;
+        graphConfig.graph_Width = graph_container.sizeDelta.x;
 
         circles = new List<GameObject>();
         objective_circles = new List<GameObject>();
