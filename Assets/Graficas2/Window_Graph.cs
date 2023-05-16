@@ -211,6 +211,7 @@ public class Window_Graph : MonoBehaviour
     // Anade un nuevo punto a la grafica
     public void AddPoint(float new_y)
     {
+
         /// PUNTO TELEMETRIA
         // Anadimos el nuevo punto
         points.Add(new_y);
@@ -234,7 +235,6 @@ public class Window_Graph : MonoBehaviour
             float o_y_pos = (objective_points[objective_index] / y_max) * graphConfig.graph_Height;
             GameObject o_point_object = CreateCircle(new Vector2(x_pos, o_y_pos));
             objective_circles.Add(o_point_object);
-            objective_index++;
         }
 
         // Se hace el check de los dos puntos a la vez para evitar reescalar dos veces
@@ -242,6 +242,8 @@ public class Window_Graph : MonoBehaviour
 
         x_pos += x_size;
 
+        if (objective_points.Count >= points.Count)
+            objective_index++;
 
         // Lo unimos a la grafica
         CreateLine();
