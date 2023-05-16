@@ -405,14 +405,16 @@ public class Window_Graph : MonoBehaviour
         }
 
         // Escalado de los eventos del diseñador
-        for (int i = 0; i < objective_circles.Count; i++)
+        for (int i = 0; i < circles.Count; i++)
         {
+            if(i < objective_circles.Count)
+            {
             RectTransform rect = objective_circles[i].GetComponent<RectTransform>();
             float y_pos = (objective_points[i] / y_max) * graphConfig.graph_Height;
 
             if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
             {
-                float x_pos = ((float)i / (objective_circles.Count - 1)) * graphConfig.graph_Width;
+                float x_pos = ((float)i / (circles.Count - 1)) * graphConfig.graph_Width;
                 Vector2 pos = new Vector2(x_pos, y_pos);
                 rect.anchoredPosition = pos;
             }
@@ -420,6 +422,7 @@ public class Window_Graph : MonoBehaviour
             {
                 Vector2 pos = new Vector2(rect.anchoredPosition.x, y_pos);
                 rect.anchoredPosition = pos;
+            }
             }
         }
 
