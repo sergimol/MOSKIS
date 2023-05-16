@@ -101,8 +101,6 @@ public class Window_Graph : MonoBehaviour
         // Ancho del grid, anchuira base 5
         graphConfig.graph_Width *= graph_container.sizeDelta.x;
 
-        graphConfig.x_segments--;
-
         circles = new List<GameObject>();
         objective_circles = new List<GameObject>();
         points = new List<float>();
@@ -150,9 +148,6 @@ public class Window_Graph : MonoBehaviour
     {
         x_size = graphConfig.graph_Width / graphConfig.x_segments;
         y_size = graphConfig.graph_Height / graphConfig.y_segments;
-
-        //graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
-        //graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
 
         float x = 0;
         float y = x;
@@ -346,10 +341,10 @@ public class Window_Graph : MonoBehaviour
             // Si Añadimos un nuevo punto y hay que desplazar la Grafica
             if (newPoint.x > x_max || newPoint2.x > x_max)
             {
-                MoveLeft();
                 // x_max será el más grande de los dos puntos
                 // Normalmente irán a la vez
                 x_max = newPoint.x > newPoint2.x ? newPoint.x : newPoint2.x;
+                MoveLeft();
             }
         }
     }
