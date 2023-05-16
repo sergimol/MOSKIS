@@ -186,14 +186,14 @@ public class Window_Graph : MonoBehaviour
             label_Y_List[i] = labelY.GetComponent<TextMeshProUGUI>();
         }
 
-        // Leyenda //
+        //// Leyenda //
         //RectTransform dash_obj = Instantiate(dash_template_Y, lines_container.transform);
         //dash_obj.anchoredPosition = new Vector2(0, -16);
         //dash_obj.GetComponent<Image>().color = objective_line_renderer.material.color;
 
         //RectTransform legend_obj = Instantiate(label_template_Y, dash_obj.transform);
         //legend_obj.anchoredPosition = new Vector2(83, 0);
-        //legend_obj.GetComponent<TextMeshProUGUI>().text = "Curva Dise�ada";
+        //legend_obj.GetComponent<TextMeshProUGUI>().text = "Objetive";
         //legend_obj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
 
@@ -203,7 +203,7 @@ public class Window_Graph : MonoBehaviour
 
         //RectTransform legend_player = Instantiate(label_template_Y, dash_player.transform);
         //legend_player.anchoredPosition = new Vector2(82, 0);
-        //legend_player.GetComponent<TextMeshProUGUI>().text = "Curva Obtenida";
+        //legend_player.GetComponent<TextMeshProUGUI>().text = "Tracking";
         //legend_player.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
     }

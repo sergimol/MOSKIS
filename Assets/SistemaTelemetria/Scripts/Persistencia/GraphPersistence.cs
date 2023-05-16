@@ -80,7 +80,7 @@ public class GraphPersistence : IPersistence
 
     Resolution resolution;
     int max_charts_per_row = 4;
-    int max_charts_per_col = 4;
+    int max_charts_per_col = 3;
 
     private void Start()
     {
@@ -109,14 +109,15 @@ public class GraphPersistence : IPersistence
 
         //Crear tantos Graph como se han configurado y pasarles la informaci�n
         Array.Resize(ref graphs, graphsConfig.Count());
-        int cuadIndex = 0;
+        int rowIndex = 0;
+        int colIndex = 0;
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
             // Creamos el objeto grafica
             GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
 
             // Rescalamos y posicionamos 
-            SetGraphInWindow(ref aux, i, cuadIndex);
+            SetGraphInWindow(ref aux, i, rowIndex, colIndex);
 
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
@@ -126,16 +127,19 @@ public class GraphPersistence : IPersistence
             graphWriters.Add(graphsConfig[i].name, new StreamWriter(fullRoute + graphsConfig[i].name + ".csv"));
             graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
 
-            cuadIndex++;
-            if(cuadIndex >= max_charts_per_row)
-                cuadIndex = 0;
+            rowIndex++;
+            if(rowIndex >= max_charts_per_row)
+                rowIndex = 0;
+            colIndex++;
+            if (colIndex >= max_charts_per_col)
+                colIndex = 0;
         }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            transform.GetChild(0).transform.gameObject.SetActive(!transform.GetChild(0).transform.gameObject.activeSelf);
+        //if (Input.GetKeyDown(KeyCode.Q))
+           // transform.GetChild(0).transform.gameObject.SetActive(!transform.GetChild(0).transform.gameObject.activeSelf);
     }
 
     private void OnDestroy()
@@ -167,7 +171,7 @@ public class GraphPersistence : IPersistence
     }
 
     // Ajusta la posicion y escala de la Grafica
-    private void SetGraphInWindow( ref GameObject chart, int index, int cuadIndex)
+    private void SetGraphInWindow( ref GameObject chart, int index, int rowIndex, int colIndex)
     {
         RectTransform rectChart = chart.GetComponent<RectTransform>();
         rectChart.localScale = new Vector3(preset_Scale / max_charts_per_row, preset_Scale / max_charts_per_row, preset_Scale / max_charts_per_row);
@@ -181,33 +185,30 @@ public class GraphPersistence : IPersistence
         {
             // HORIZONTAL ABAJO
             case Constrains.LEFT_BOTTOM:
-                float aux_offset = 0;
-                if (index >= 4) aux_offset = 50;
-                offsetX = (resolution.width / max_charts_per_row) * cuadIndex;
+                offsetX = (resolution.width / max_charts_per_row) * rowIndex;
                 row = index / max_charts_per_row;
                 offsetY = rectChart.anchoredPosition.y + row * (rectChart.rect.height / max_charts_per_row); // el height es el original por eso hay que reescalarlo para abajo
                 rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
                 break;
 
             case Constrains.LEFT_TOP:
-                offsetX = (resolution.width / max_charts_per_row) * cuadIndex;
+                offsetX = (resolution.width / max_charts_per_row) * rowIndex;
                 row = index / max_charts_per_row;
-                // este 1080 hay que sacarlo a una variable porque el height del graph no es exacto y no da pa las cuentas
-                offsetY = resolution.height - ((row+1) * (1080 / max_charts_per_row)); // el height es el original por eso hay que reescalarlo para abajo
+                offsetY = resolution.height - ((row+1) * (rectChart.rect.height / max_charts_per_row)); // el height es el original por eso hay que reescalarlo para abajo
                 rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
                 break;
 
             case Constrains.LEFT_VERTICAL:
                 col = index / max_charts_per_col;
-                offsetX = (1920 / max_charts_per_col) * col;
-                offsetY = resolution.height - (1080 / max_charts_per_col) - (resolution.height / max_charts_per_col) * cuadIndex; // el height es el original por eso hay que reescalarlo para abajo
+                offsetX = (resolution.width / max_charts_per_col) * col;
+                offsetY = resolution.height - (1080 / max_charts_per_col) - (resolution.height / max_charts_per_col) * colIndex; // el height es el original por eso hay que reescalarlo para abajo
                 rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
                 break;
 
             case Constrains.RIGHT_VERTICAL:
                 col = index / max_charts_per_col;
-                offsetX = resolution.width - (1920 / max_charts_per_col) * (col + 1);
-                offsetY = resolution.height - (1080 / max_charts_per_col) - (resolution.height / max_charts_per_col) * cuadIndex; // el height es el original por eso hay que reescalarlo para abajo
+                offsetX = resolution.width - (rectChart.rect.width / max_charts_per_col) * (col + 1);
+                offsetY = resolution.height - (1080 / max_charts_per_col) - (1080 / max_charts_per_col) * colIndex; // el height es el original por eso hay que reescalarlo para abajo
                 rectChart.anchoredPosition = new Vector2(offsetX, offsetY);
                 break;
 
