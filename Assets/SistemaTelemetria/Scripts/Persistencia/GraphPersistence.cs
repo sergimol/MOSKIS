@@ -211,7 +211,8 @@ public class GraphPersistence : IPersistence
                 break;
 
             case Constrains.FREE_CONFIG:
-                break;
+                rectChart.anchoredPosition = new Vector2(graphsConfig[index].graph_X, graphsConfig[index].graph_Y);
+                rectChart.localScale = new Vector3(preset_Scale * graphsConfig[index].scale, preset_Scale * graphsConfig[index].scale, preset_Scale * graphsConfig[index].scale); break;
         }
     }
 }
