@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TrackerConfig : MonoBehaviour
 {
-    // Configuración del tracker específica para el juego
+    // Configuracion del tracker especifica para el juego
     // Struct y array para elegir desde el editor que eventos se trackean
     [Serializable]
     public struct EventConfig
@@ -16,7 +16,7 @@ public class TrackerConfig : MonoBehaviour
     [SerializeField]
     public EventConfig[] eventConfig;
 
-    // Diccionario para comprobar rápidamente si debe trackearse un evento durante ejecución
+    // Diccionario para comprobar rapidamente si debe trackearse un evento durante ejecucion
     public Dictionary<string, bool> eventsTracked = new Dictionary<string, bool>();
 
     private void Awake()
