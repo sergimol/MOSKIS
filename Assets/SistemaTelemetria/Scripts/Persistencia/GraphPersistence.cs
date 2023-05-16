@@ -63,6 +63,9 @@ public class GraphPersistence : IPersistence
     private string baseSaveRoute = "Trazas\\Graphs\\";
     private Dictionary<string, StreamWriter> graphWriters;
 
+    float preset_Scale = 1f;
+    Vector2 pos_Offset = new Vector2(100, 100);
+
     private void Start()
     {
         eventsBuff = new();
@@ -80,20 +83,34 @@ public class GraphPersistence : IPersistence
         canvasObject.transform.SetParent(transform, false);     // Hacer que el objeto Canvas sea hijo del objeto padre
         canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         canvasObject.GetComponent<Canvas>().worldCamera = Camera.main;
-        canvasObject.GetComponent<Canvas>().scaleFactor = 0.8f;  //!CUIDAO
+        canvasObject.GetComponent<Canvas>().scaleFactor = 1f;  //!CUIDAO
+
+
+        // ESTO ESTA SIENDO DELICADO
+        CanvasScaler mivieja = canvasObject.GetComponent<CanvasScaler>();
+        mivieja.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        Resolution res = Screen.currentResolution;
+        mivieja.referenceResolution = new Vector2(res.width, res.height);
 
         //Crear tantos Graph como se han configurado y pasarles la información
         Array.Resize(ref graphs, graphsConfig.Count());
         for (int i = 0; i < graphsConfig.Count(); ++i)
         {
             GameObject aux = Instantiate(graphObject, parent: canvasObject.transform);
-            aux.GetComponent<RectTransform>().offsetMax = new Vector2(graphsConfig[i].graph_X, graphsConfig[i].graph_Y);
+            //aux.GetComponent<RectTransform>().offsetMax = new Vector2(graphsConfig[i].graph_X, graphsConfig[i].graph_Y);
+            // Rescalamos y posicionamos 
+            aux.GetComponent<RectTransform>().localScale = new Vector3(preset_Scale / graphsConfig.Count(), preset_Scale / graphsConfig.Count(), preset_Scale);
+            float offset = (res.width / graphsConfig.Count()) * i;
+            aux.GetComponent<RectTransform>().anchoredPosition = new Vector2(pos_Offset.x + offset,  pos_Offset.y + graphsConfig[i].graph_Y);
+
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
             graphs[i].SetConfig(graphsConfig[i]);
+
             // Crear el archivo en el que se guardarán los puntos en formato de texto
             graphWriters.Add(graphsConfig[i].name, new StreamWriter(fullRoute + graphsConfig[i].name + ".csv"));
             graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
+
         }
     }
 

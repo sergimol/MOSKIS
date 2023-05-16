@@ -10,7 +10,7 @@ public class Window_Graph : MonoBehaviour
 {
     [SerializeField]
     Sprite circle_sprite;
-    float circle_scale = 5;
+    float circle_scale = 20;
 
     // Puntos de la telemetria
     List<float> points;
@@ -97,9 +97,9 @@ public class Window_Graph : MonoBehaviour
         label_Y_List = new TextMeshProUGUI[graphConfig.y_segments + 1];
 
         // Altura del grid, altura base 5
-        graphConfig.graph_Height *= graph_container.sizeDelta.y / 5;
+        graphConfig.graph_Height *= graph_container.sizeDelta.y;
         // Ancho del grid, anchuira base 5
-        graphConfig.graph_Width *= graph_container.sizeDelta.x / 5;
+        graphConfig.graph_Width *= graph_container.sizeDelta.x;
 
         graphConfig.x_segments--;
 
@@ -123,6 +123,21 @@ public class Window_Graph : MonoBehaviour
         ShowGraph();
 
 
+        // Obtener el tamaño de la resolución actual de la pantalla
+        Resolution resolution = Screen.currentResolution;
+
+        // Mostrar el ancho y alto en la consola
+        Debug.Log("Ancho de pantalla: " + resolution.width);
+        Debug.Log("Alto de pantalla: " + resolution.height);
+
+        // Obtener el tamaño de la ventana de juego
+        int windowWidth = Screen.width;
+        int windowHeight = Screen.height;
+
+        // Mostrar el ancho y alto en la consola
+        Debug.Log("Ancho de la ventana de juego: " + windowWidth);
+        Debug.Log("Alto de la ventana de juego: " + windowHeight);
+
     }
 
     // Update is called once per frame
@@ -136,8 +151,8 @@ public class Window_Graph : MonoBehaviour
         x_size = graphConfig.graph_Width / graphConfig.x_segments;
         y_size = graphConfig.graph_Height / graphConfig.y_segments;
 
-        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
-        graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
+        //graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, graphConfig.graph_Width);
+        //graph_container.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, graphConfig.graph_Height);
 
         float x = 0;
         float y = x;
