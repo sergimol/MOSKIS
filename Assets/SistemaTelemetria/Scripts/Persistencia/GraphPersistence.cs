@@ -16,6 +16,9 @@ using UnityEditor.PackageManager.UI;
 public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
 public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
 
+public enum awebo { H_AB, H_AR, V_D, V_I, L }
+
+
 [Serializable]
 public struct GraphConfig
 {
@@ -112,6 +115,8 @@ public class GraphPersistence : IPersistence
             graphWriters[graphsConfig[i].name].WriteLine(graphsConfig[i].eventX + "," + graphsConfig[i].eventY);
 
         }
+
+
     }
 
     private void Update()
