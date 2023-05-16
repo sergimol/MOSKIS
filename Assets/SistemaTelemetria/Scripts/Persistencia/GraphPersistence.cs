@@ -15,6 +15,7 @@ using UnityEditor.PackageManager.UI;
 
 public enum GraphTypes { ACCUMULATED, NOTACCUMULATED, AVERAGE }
 public enum Scaling { X_SCALING_START, X_SCALING_OFFSET, ONLY_Y }
+public enum Constrains { FREE_CONFIG, LEFT_TOP, LEFT_BOTTOM, LEFT_VERTICAL, RIGHT_VERTICAL }
 
 public enum awebo { H_AB, H_AR, V_D, V_I, L }
 
@@ -57,6 +58,8 @@ public class GraphPersistence : IPersistence
     List<TrackerEvent> eventsBuff;
 
     public GameObject graphObject;
+
+    public Constrains constrainsGraphs;
 
     //La configuracion inicial de todos los graphs desde el editor
     public GraphConfig[] graphsConfig;
@@ -104,7 +107,7 @@ public class GraphPersistence : IPersistence
             // Rescalamos y posicionamos 
             aux.GetComponent<RectTransform>().localScale = new Vector3(preset_Scale / graphsConfig.Count(), preset_Scale / graphsConfig.Count(), preset_Scale);
             float offset = (res.width / graphsConfig.Count()) * i;
-            aux.GetComponent<RectTransform>().anchoredPosition = new Vector2(offset,  graphsConfig[i].graph_Y);
+            aux.GetComponent<RectTransform>().anchoredPosition = new Vector2(offset, graphsConfig[i].graph_Y);
 
             graphs[i] = aux.GetComponent<Window_Graph>();
             graphs[i].name = graphsConfig[i].name;
@@ -121,11 +124,13 @@ public class GraphPersistence : IPersistence
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+            transform.GetChild(0).transform.gameObject.SetActive(!transform.GetChild(0).transform.gameObject.activeSelf);
     }
 
     private void OnDestroy()
     {
-        for(int i = 0; i < graphs.Length; ++i)
+        for (int i = 0; i < graphs.Length; ++i)
         {
             graphWriters[graphs[i].name].Close();
         }
@@ -166,7 +171,7 @@ public class GraphPersistenceEditor : Editor
 
     void OnValidate()
     {
-        
+
     }
     public override void OnInspectorGUI()
     {
@@ -187,37 +192,44 @@ public class GraphPersistenceEditor : Editor
         //M�todo de checkeo de cambios en el editor
         EditorGUI.BeginChangeCheck();
 
+        graphPersistence.constrainsGraphs = (Constrains)EditorGUILayout.EnumPopup("Constrains", graphPersistence.constrainsGraphs);
+        EditorGUILayout.Space(10);
+
         // Crea un men� dropdown para cada elemento de graphs
         for (int i = 0; i < graphPersistence.graphsConfig.Length; i++)
         {
-            graphPersistence.graphsConfig[i].name = EditorGUILayout.TextField("GraphName", graphPersistence.graphsConfig[i].name);
+            GraphConfig actGraphConf = graphPersistence.graphsConfig[i];
+            actGraphConf.name = EditorGUILayout.TextField("GraphName", actGraphConf.name);
 
-            graphPersistence.graphsConfig[i].myCurve = EditorGUILayout.CurveField(graphPersistence.graphsConfig[i].myCurve);
+            actGraphConf.myCurve = EditorGUILayout.CurveField(actGraphConf.myCurve);
             EditorGUILayout.Space(5);
-            
+
             //Variables de escala
-            graphPersistence.graphsConfig[i].graphType = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", graphPersistence.graphsConfig[i].graphType);
-            graphPersistence.graphsConfig[i].scaling = (Scaling)EditorGUILayout.EnumPopup("Scaling", graphPersistence.graphsConfig[i].scaling);
+            actGraphConf.graphType = (GraphTypes)EditorGUILayout.EnumPopup("GraphType", actGraphConf.graphType);
+            actGraphConf.scaling = (Scaling)EditorGUILayout.EnumPopup("Scaling", actGraphConf.scaling);
 
             // Crea un men� popup con los nombres de los eventos
             int selectedEventIndex;
-            selectedEventIndex = EditorGUILayout.Popup("Select Event X", eventNames.IndexOf(graphPersistence.graphsConfig[i].eventX), eventNames.ToArray());
-            if (selectedEventIndex != -1 && graphPersistence.graphsConfig[i].eventX != eventNames[selectedEventIndex])
-                graphPersistence.graphsConfig[i].eventX = eventNames[selectedEventIndex];
-            
-            selectedEventIndex = EditorGUILayout.Popup("Select Event Y", eventNames.IndexOf(graphPersistence.graphsConfig[i].eventY), eventNames.ToArray());
-            if (selectedEventIndex != -1 && graphPersistence.graphsConfig[i].eventY != eventNames[selectedEventIndex])
-                graphPersistence.graphsConfig[i].eventY = eventNames[selectedEventIndex];
+            selectedEventIndex = EditorGUILayout.Popup("Select Event X", eventNames.IndexOf(actGraphConf.eventX), eventNames.ToArray());
+            if (selectedEventIndex != -1 && actGraphConf.eventX != eventNames[selectedEventIndex])
+                actGraphConf.eventX = eventNames[selectedEventIndex];
+
+            selectedEventIndex = EditorGUILayout.Popup("Select Event Y", eventNames.IndexOf(actGraphConf.eventY), eventNames.ToArray());
+            if (selectedEventIndex != -1 && actGraphConf.eventY != eventNames[selectedEventIndex])
+                actGraphConf.eventY = eventNames[selectedEventIndex];
 
             //El resto de configuracion
-            graphPersistence.graphsConfig[i].graph_Height = EditorGUILayout.FloatField("Graph_Height", graphPersistence.graphsConfig[i].graph_Height);
-            graphPersistence.graphsConfig[i].graph_Width = EditorGUILayout.FloatField("Graph_Width", graphPersistence.graphsConfig[i].graph_Width);
+            actGraphConf.graph_Height = EditorGUILayout.FloatField("Graph_Height", actGraphConf.graph_Height);
+            actGraphConf.graph_Width = EditorGUILayout.FloatField("Graph_Width", actGraphConf.graph_Width);
 
-            graphPersistence.graphsConfig[i].graph_X = EditorGUILayout.IntField("X_Pos", graphPersistence.graphsConfig[i].graph_X);
-            graphPersistence.graphsConfig[i].graph_Y = EditorGUILayout.IntField("Y_Pos", graphPersistence.graphsConfig[i].graph_Y);
+            if (graphPersistence.constrainsGraphs == Constrains.FREE_CONFIG)
+            {
+                actGraphConf.graph_X = EditorGUILayout.IntField("X_Pos", actGraphConf.graph_X);
+                actGraphConf.graph_Y = EditorGUILayout.IntField("Y_Pos", actGraphConf.graph_Y);
+            }
 
-            graphPersistence.graphsConfig[i].x_segments = EditorGUILayout.IntField("X_segments", graphPersistence.graphsConfig[i].x_segments);
-            graphPersistence.graphsConfig[i].y_segments = EditorGUILayout.IntField("Y_segments", graphPersistence.graphsConfig[i].y_segments);
+            actGraphConf.x_segments = EditorGUILayout.IntField("X_segments", actGraphConf.x_segments);
+            actGraphConf.y_segments = EditorGUILayout.IntField("Y_segments", actGraphConf.y_segments);
 
             EditorGUILayout.Space(20);
         }
@@ -228,11 +240,11 @@ public class GraphPersistenceEditor : Editor
 
         //Si ha habido cambios utilizamos setDirty para que unity no cambie los valores de editor y se mantengan para ejecucion
 
-        if (EditorGUI.EndChangeCheck())        
+        if (EditorGUI.EndChangeCheck())
 
             EditorUtility.SetDirty(target);
 
-        
+
 
         // Guarda los cambios realizados en el editor
 

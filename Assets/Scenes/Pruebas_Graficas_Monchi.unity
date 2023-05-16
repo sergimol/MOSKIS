@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graphObject: {fileID: 0}
+  constrainsGraphs: 0
   graphsConfig: []
 --- !u!4 &272236016
 Transform:
@@ -531,6 +532,10 @@ PrefabInstance:
       propertyPath: graphObject
       value: 
       objectReference: {fileID: 9104108124509106093, guid: 6fa1562933397c845824d204e54b278f, type: 3}
+    - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
+      propertyPath: constrainsGraphs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4663672378963055129, guid: e54a1337fcc7dd1458445f247956d12c, type: 3}
       propertyPath: graphsConfig.Array.size
       value: 2
