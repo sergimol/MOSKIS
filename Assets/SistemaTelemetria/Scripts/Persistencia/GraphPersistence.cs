@@ -37,11 +37,13 @@ public struct GraphConfig
     public float graph_Height;
     [HideInInspector]
     public float graph_Width;
-    //Posici�n en X e Y
+    //Posicion en X e Y
     [HideInInspector]
     public int graph_X;
     [HideInInspector]
     public int graph_Y;
+    [HideInInspector]
+    public float scale;
     [HideInInspector]
     public int x_segments; // numero de separaciones que tiene el Eje X (Ademas es el numero de puntos que se representan en la grafica a la vez)
     [HideInInspector]
@@ -274,13 +276,14 @@ public class GraphPersistenceEditor : Editor
                 actGraphConf.eventY = eventNames[selectedEventIndex];
 
             //El resto de configuracion
-            actGraphConf.graph_Height = EditorGUILayout.FloatField("Graph_Height", actGraphConf.graph_Height);
-            actGraphConf.graph_Width = EditorGUILayout.FloatField("Graph_Width", actGraphConf.graph_Width);
+            //actGraphConf.graph_Height = EditorGUILayout.FloatField("Graph_Height", actGraphConf.graph_Height);
+            //actGraphConf.graph_Width = EditorGUILayout.FloatField("Graph_Width", actGraphConf.graph_Width);
 
             if (graphPersistence.constrainsGraphs == Constrains.FREE_CONFIG)
             {
                 actGraphConf.graph_X = EditorGUILayout.IntField("X_Pos", actGraphConf.graph_X);
                 actGraphConf.graph_Y = EditorGUILayout.IntField("Y_Pos", actGraphConf.graph_Y);
+                actGraphConf.scale = EditorGUILayout.FloatField("Scale", actGraphConf.scale);
             }
 
             actGraphConf.x_segments = EditorGUILayout.IntField("X_segments", actGraphConf.x_segments);

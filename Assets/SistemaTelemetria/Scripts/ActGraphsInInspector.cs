@@ -51,10 +51,11 @@ public class ActGraphsInInspector : MonoBehaviour
                     AnimationUtility.SetKeyRightTangentMode(anC, j, TangentMode.Linear);
                     AnimationUtility.SetKeyLeftTangentMode(anC, j, TangentMode.Linear);
                 }
+                //Elimino los puntos que sobran si se ha reducido x_segments
                 while (anC.length > grpP.graphsConfig[i].x_segments)
                     anC.RemoveKey(anC.length - 1);
             }
-
+            //Ponemos siempre el wrapmode a clamp
             anC.preWrapMode = WrapMode.Clamp;
             anC.postWrapMode = WrapMode.Clamp;
         }
