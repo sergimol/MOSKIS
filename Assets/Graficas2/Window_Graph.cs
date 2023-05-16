@@ -166,7 +166,7 @@ public class Window_Graph : MonoBehaviour
 
             RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
             labelX.anchoredPosition = new Vector2(x, 0);
-            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString();
+            labelX.GetComponent<TextMeshProUGUI>().text = i.ToString("F1");
             label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
 
             x += x_size;
@@ -182,7 +182,7 @@ public class Window_Graph : MonoBehaviour
 
             RectTransform labelY = Instantiate(label_template_Y, label_Y_container.transform);
             labelY.anchoredPosition = new Vector2(0, y);
-            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / graphConfig.y_segments) * i).ToString();
+            labelY.GetComponent<TextMeshProUGUI>().text = ((y_max / graphConfig.y_segments) * i).ToString("F1");
 
             y += y_size;
 
@@ -318,7 +318,7 @@ public class Window_Graph : MonoBehaviour
         // Añadimos el nuevo marcador abajo
         RectTransform labelX = Instantiate(label_template_X, label_X_container.transform);
         labelX.anchoredPosition = new Vector2(x_pos, 0);
-        labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString();
+        labelX.GetComponent<TextMeshProUGUI>().text = label_X_List.Count.ToString("F1");
         label_X_List.Add(labelX.GetComponent<TextMeshProUGUI>());
     }
 
@@ -429,7 +429,7 @@ public class Window_Graph : MonoBehaviour
         // Cambio en el texto de los segmentos en Y
         for (int i = 0; i < label_Y_List.Length; i++)
         {
-            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F2"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
+            label_Y_List[i].text = ((y_max / graphConfig.y_segments) * i).ToString("F1"); // F2 hace que se quede solo con 2 decimales para evitar floats grandes
         }
 
         if (graphConfig.scaling == Scaling.X_SCALING_START || (graphConfig.scaling == Scaling.X_SCALING_OFFSET && circles.Count > graphConfig.x_segments))
@@ -437,7 +437,7 @@ public class Window_Graph : MonoBehaviour
             // Reescalado de los puntos en X que se actualiza cuando se añaden
             for (int i = 0; i < label_X_List.Count; i++)
             {
-                label_X_List[i].text = (((float)(circles.Count - 1) / (float)graphConfig.x_segments) * i).ToString("F2");
+                label_X_List[i].text = (((float)(circles.Count - 1) / (float)graphConfig.x_segments) * i).ToString("F1");
             }
         }
         
