@@ -291,7 +291,7 @@ public class GraphPersistenceEditor : Editor
             {
                 actGraphConf.graph_X = EditorGUILayout.IntField("X Pos", actGraphConf.graph_X);
                 actGraphConf.graph_Y = EditorGUILayout.IntField("Y Pos", actGraphConf.graph_Y);
-                actGraphConf.scale = EditorGUILayout.FloatField("Scale", actGraphConf.scale);
+                actGraphConf.scale = EditorGUILayout.Slider("Scale", actGraphConf.scale, 0.0f, 1.0f);
             }
 
             actGraphConf.x_segments = EditorGUILayout.IntField("X segments", actGraphConf.x_segments);
