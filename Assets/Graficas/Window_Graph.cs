@@ -478,7 +478,7 @@ public class Window_Graph : MonoBehaviour
 
     public Vector2 getLatestPoint()
     {
-        return new Vector2(objective_index - 1, points[^1]);
+        return new Vector2(points.Count - 1, points[^1]);
     }
 
     public float getLatestObjectivePoint()
